@@ -1,25 +1,34 @@
-@import 'SASS/Alerts';
-@import 'SASS/Article';
-@import 'SASS/Badges';
-@import 'SASS/Body';
-@import 'SASS/botones';
-@import 'SASS/Cards';
-@import 'SASS/Containers';
-@import 'SASS/DivDisplays';
-@import 'SASS/DivStyle';
-@import 'SASS/FontsStyles';
-@import 'SASS/FormElements';
-@import 'SASS/Forms';
-@import 'SASS/Grids';
-@import 'SASS/Header';
-@import 'SASS/Hovers';
-@import 'SASS/NavBar';
-@import 'SASS/Paddings';
-@import 'SASS/Shadow';
-@import 'SASS/Utilitdades';
-@import 'SASS/Variables';
-@import 'SASS/Footer';
+// Importar variables primero (necesario para otros archivos)
+@use 'SASS/Variables' as *;
+
+// Importar funciones y mixins de Sass
+@use 'sass:color';
+@use 'sass:map';
+@use 'sass:math';
+
+// Importar todos los módulos
+@use 'SASS/Alerts';
+@use 'SASS/Article';
+@use 'SASS/Badges';
+@use 'SASS/Body';
+@use 'SASS/botones';
+@use 'SASS/Cards';
+@use 'SASS/Containers';
+@use 'SASS/DivDisplays';
+@use 'SASS/DivStyle';
+@use 'SASS/FontsStyles';
+@use 'SASS/FormElements';
+@use 'SASS/Forms';
+@use 'SASS/Grids';
+@use 'SASS/Header';
+@use 'SASS/Hovers';
+@use 'SASS/NavBar';
+@use 'SASS/Paddings';
+@use 'SASS/Shadow';
+@use 'SASS/Utilitdades';
+@use 'SASS/Footer';
+
+// Estilos personalizados
 .emoji-cursor {
     cursor: url('/WhatsApp_Image_2024-04-30_at_9.34.35_PM-removebg-preview.png'), auto;
 }
-

@@ -1,109 +1,160 @@
 @import 'Variables';
 
-.Letter_hover {
-    &:hover {
-        transition: .15s all ease-in;
-        font-weight: bold;
-        background-image: linear-gradient(to right, rgb(153, 148, 252), white);
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+// ===== TEXT HOVER EFFECTS =====
+
+// Gradient text hover with smooth transition
+.letter-hover {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    font-weight: 600;
+    background: linear-gradient(135deg, rgb(153, 148, 252) 0%, rgba(255, 255, 255, 0.9) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transform: translateY(-1px);
+  }
 }
 
+// Enhanced list item hover with smoother scaling
+.list-letter-hover {
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
+  
+  &:hover {
+    font-size: calc(1em + 15px);
+    font-weight: 600;
+    text-shadow: 0px 4px 15px rgba($color-primario, 0.6);
+    transform: scale(1.02);
+  }
 
-.list_Letter_hover {
-    &:hover {
-        transition: .5s all ease-in-out;
-        font-size: +15px;
-        font-weight: bold;
-        text-shadow: 0px 2px 10px $color-primario;
-
-    }
-
-    &:active,
-    &:after {
-        transition: .3s all ease-out;
-        font-size: 16px;
-        color: whitesmoke;
-    }
+  &:active {
+    transition: all 0.2s ease-out;
+    transform: scale(0.98);
+    color: rgba(whitesmoke, 0.9);
+  }
 }
 
-.div_hover_Scale_Up_Down {
-    transition: .45s all ease-in;
+// ===== SCALE HOVER EFFECTS =====
 
-    &:hover {
-        transform: scaleX(1.05);
-    }
-
-    &:after {
-        transition: .35s all ease-out;
-        transform: scaleX(1);
-    }
+// Base mixin for scale effects
+@mixin scale-hover-base($scale: 1.05, $duration: 0.4s) {
+  cursor: pointer;
+  transition: transform $duration cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  
+  &:hover {
+    transform: scale($scale);
+  }
+  
+  &:active {
+    transform: scale(0.96);
+    transition: transform 0.15s ease-out;
+  }
 }
 
-
-.Letter_hover_Scale_Up_Down {
-    transition: 0.45s all ease-in;
-
-    &:hover {
-        transform: scaleX(1.05);
-    }
-
-    &:after {
-        transition: 0.35s all ease-out;
-        transform: scaleX(1);
-    }
+// Container scale hover
+.div-hover-scale {
+  @include scale-hover-base(1.03, 0.35s);
 }
 
-.letter-hover-border {
-    transition: border 0.3s all ease-in-out;
-
-    &:hover {
-        text-shadow: 5px 0px 15px whitesmoke;
-    }
+// Text scale hover
+.letter-hover-scale {
+  @include scale-hover-base(1.05, 0.4s);
 }
 
-.letter-hover-left-color {
-    @extend .letter-hover-border;
+// ===== SHADOW HOVER EFFECTS =====
 
-    &:hover {
-        text-shadow: -5px 0px $color-secundario;
-    }
+// Base shadow hover class
+.letter-hover-shadow-base {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
 }
 
-.letter-hover-right-color {
-    @extend .letter-hover-border;
-
-    &:hover {
-        text-shadow: 5px 0px $color-secundario;
-    }
+// Directional shadow variations
+.letter-hover-shadow-left {
+  @extend .letter-hover-shadow-base;
+  
+  &:hover {
+    text-shadow: -8px 0px 20px rgba($color-secundario, 0.7);
+  }
 }
 
-.letter-hover-bottom-color {
-    @extend .letter-hover-border;
-
-    &:hover {
-        text-shadow: 0px 5px $color-secundario;
-    }
+.letter-hover-shadow-right {
+  @extend .letter-hover-shadow-base;
+  
+  &:hover {
+    text-shadow: 8px 0px 20px rgba($color-secundario, 0.7);
+  }
 }
 
-.letter-hover-top-color {
-    @extend .letter-hover-border;
-
-    &:hover {
-        text-shadow: 0px -5px $color-secundario;
-    }
+.letter-hover-shadow-bottom {
+  @extend .letter-hover-shadow-base;
+  
+  &:hover {
+    text-shadow: 0px 8px 20px rgba($color-secundario, 0.7);
+  }
 }
 
+.letter-hover-shadow-top {
+  @extend .letter-hover-shadow-base;
+  
+  &:hover {
+    text-shadow: 0px -8px 20px rgba($color-secundario, 0.7);
+  }
+}
 
+// Glow effect variation
+.letter-hover-glow {
+  @extend .letter-hover-shadow-base;
+  
+  &:hover {
+    text-shadow: 
+      0px 0px 10px rgba(whitesmoke, 0.8),
+      0px 0px 20px rgba(whitesmoke, 0.4),
+      0px 0px 30px rgba(whitesmoke, 0.2);
+  }
+}
 
+// ===== BACKGROUND HOVER EFFECTS =====
 
+// Simple background hover with improved styling
+.div-hover-background {
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  border-radius: 4px;
+  
+  &:hover {
+    background-color: rgba(106, 105, 105, 0.12);
+    backdrop-filter: blur(10px);
+    transform: translateY(-1px);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
 
+// ===== UTILITY CLASSES =====
 
-
-.div_simple_hover {
+// Disable hover effects on touch devices
+@media (hover: none) {
+  .letter-hover,
+  .list-letter-hover,
+  .div-hover-scale,
+  .letter-hover-scale,
+  .letter-hover-shadow-base,
+  .div-hover-background {
     &:hover {
-        background-color: #6a696952;
-        border-radius: 0px;
+      transform: none;
+      text-shadow: none;
+      background: none;
+      background-color: transparent;
+      font-weight: inherit;
+      font-size: inherit;
     }
+  }
 }

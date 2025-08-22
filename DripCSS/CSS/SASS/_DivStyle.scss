@@ -1,18 +1,367 @@
 @import 'Variables';
 
+// =============================================================================
+// WELCOME CARD COMPONENT
+// =============================================================================
+
 .welcome {
-    border: rgb(133, 133, 133) solid 1px;
-    margin-left: 15%;
-    margin-right: 15%;
-    margin-top: 5%;
-    border-radius: 12px;
-    box-shadow: 0px 0px 4px 4px $color-secundario;
+  border: 1px solid rgb(133, 133, 133);
+  border-radius: 12px;
+  box-shadow: 0 0 4px 4px $color-secundario;
+  margin: 5% 15% 0;
+  
+  // Responsive behavior
+  @media (max-width: 1024px) {
+    margin: 5% 10% 0;
+  }
+  
+  @media (max-width: 768px) {
+    margin: 5% 5% 0;
+  }
+  
+  @media (max-width: 480px) {
+    margin: 3% 2% 0;
+    border-radius: 8px;
+  }
 }
 
-.div_full_md {
-    width: 90%;
-    height: 40vh;
-    padding: 5% 8%;
-    justify-self: center;
-    align-self: center;
+// Welcome variants
+.welcome--large {
+  @extend .welcome;
+  margin: 5% 10% 0;
+}
+
+.welcome--small {
+  @extend .welcome;
+  margin: 5% 20% 0;
+}
+
+.welcome--no-shadow {
+  @extend .welcome;
+  box-shadow: none;
+}
+
+.welcome--soft {
+  @extend .welcome;
+  border-color: rgba(133, 133, 133, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+// =============================================================================
+// CONTAINER UTILITIES
+// =============================================================================
+
+.container-full-md {
+  width: 90%;
+  height: 40vh;
+  padding: 5% 8%;
+  justify-self: center;
+  align-self: center;
+}
+
+// Container size variants
+.container-sm {
+  width: 70%;
+  height: 30vh;
+  padding: 3% 5%;
+  justify-self: center;
+  align-self: center;
+}
+
+.container-lg {
+  width: 95%;
+  height: 60vh;
+  padding: 6% 10%;
+  justify-self: center;
+  align-self: center;
+}
+
+.container-xl {
+  width: 100%;
+  height: 80vh;
+  padding: 8% 12%;
+  justify-self: center;
+  align-self: center;
+}
+
+// =============================================================================
+// CARD SYSTEM
+// =============================================================================
+
+%card-base {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(133, 133, 133, 0.2);
+  overflow: hidden;
+}
+
+.card {
+  @extend %card-base;
+  padding: 1.5rem;
+  background: white;
+  
+  &--elevated {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  &--flat {
+    box-shadow: none;
+    border: 1px solid $color-border;
+  }
+  
+  &--outlined {
+    box-shadow: none;
+    border: 2px solid $color-primary;
+  }
+}
+
+// =============================================================================
+// SPACING UTILITIES
+// =============================================================================
+
+// Margin utilities
+.m-auto {
+  margin: auto;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+// Responsive margins
+.mx-responsive {
+  margin-left: 15%;
+  margin-right: 15%;
+  
+  @media (max-width: 1024px) {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  
+  @media (max-width: 768px) {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  
+  @media (max-width: 480px) {
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+}
+
+// Padding utilities
+.p-responsive {
+  padding: 5% 8%;
+  
+  @media (max-width: 768px) {
+    padding: 4% 6%;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 3% 4%;
+  }
+}
+
+// =============================================================================
+// SIZE UTILITIES
+// =============================================================================
+
+// Width utilities
+.w-90 {
+  width: 90%;
+}
+
+.w-80 {
+  width: 80%;
+}
+
+.w-70 {
+  width: 70%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+// Height utilities
+.h-40vh {
+  height: 40vh;
+}
+
+.h-50vh {
+  height: 50vh;
+}
+
+.h-60vh {
+  height: 60vh;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+// Min/Max heights
+.min-h-40vh {
+  min-height: 40vh;
+}
+
+.max-h-80vh {
+  max-height: 80vh;
+}
+
+// =============================================================================
+// BORDER UTILITIES
+// =============================================================================
+
+.border {
+  border: 1px solid $color-border;
+}
+
+.border-light {
+  border: 1px solid rgba(133, 133, 133, 0.3);
+}
+
+.border-medium {
+  border: 1px solid rgb(133, 133, 133);
+}
+
+.border-dark {
+  border: 1px solid rgba(133, 133, 133, 0.8);
+}
+
+// Border radius
+.rounded-sm {
+  border-radius: 4px;
+}
+
+.rounded {
+  border-radius: 8px;
+}
+
+.rounded-lg {
+  border-radius: 12px;
+}
+
+.rounded-xl {
+  border-radius: 16px;
+}
+
+.rounded-full {
+  border-radius: 50%;
+}
+
+// =============================================================================
+// SHADOW UTILITIES
+// =============================================================================
+
+.shadow-none {
+  box-shadow: none;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-lg {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.shadow-colored {
+  box-shadow: 0 0 4px 4px $color-secundario;
+}
+
+// =============================================================================
+// POSITIONING UTILITIES
+// =============================================================================
+
+.center-self {
+  justify-self: center;
+  align-self: center;
+}
+
+.justify-self-center {
+  justify-self: center;
+}
+
+.align-self-center {
+  align-self: center;
+}
+
+.justify-self-start {
+  justify-self: start;
+}
+
+.justify-self-end {
+  justify-self: end;
+}
+
+// =============================================================================
+// RESPONSIVE DESIGN MIXINS
+// =============================================================================
+
+@mixin responsive-container($base-width: 90%, $base-padding: 5% 8%) {
+  width: $base-width;
+  padding: $base-padding;
+  
+  @media (max-width: 768px) {
+    width: 95%;
+    padding: 4% 6%;
+  }
+  
+  @media (max-width: 480px) {
+    width: 98%;
+    padding: 3% 4%;
+  }
+}
+
+@mixin responsive-margins($base: 15%) {
+  margin-left: $base;
+  margin-right: $base;
+  
+  @media (max-width: 1024px) {
+    margin-left: calc(#{$base} * 0.66);
+    margin-right: calc(#{$base} * 0.66);
+  }
+  
+  @media (max-width: 768px) {
+    margin-left: calc(#{$base} * 0.33);
+    margin-right: calc(#{$base} * 0.33);
+  }
+  
+  @media (max-width: 480px) {
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+}
+
+// =============================================================================
+// UTILITY CLASSES USING MIXINS
+// =============================================================================
+
+.responsive-container {
+  @include responsive-container();
+  justify-self: center;
+  align-self: center;
+}
+
+.responsive-margins {
+  @include responsive-margins();
 }

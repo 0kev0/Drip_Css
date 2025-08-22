@@ -1,92 +1,419 @@
-@import 'Variables';
+@use 'Variables' as *;
+@use 'sass:map';
+@use 'sass:color';
 
-.badge {
-    font-size: 1.4rem;
-    font-weight: 500;
-    position: relative;
-    padding: 4px 12px;
-    width: 200px;
+// =============================================================================
+// VARIABLES Y CONFIGURACIÓN DE BADGES
+// =============================================================================
 
-    &::before {
-        content: attr(data-badge);
-        font-size: 14px;
-        position: absolute;
-        left: 93%;
-        bottom: 70%;
-        background: #ffffff;  
-        padding: 4px 5px;
-        border-radius: 50%;
-    }
+$badge-sizes: (
+  'xs': (
+    'font-size': 0.75rem,    // 12px
+    'padding': 2px 6px,
+    'min-width': 1.25rem,    // 20px
+    'height': 1.25rem
+  ),
+  'sm': (
+    'font-size': 0.875rem,   // 14px
+    'padding': 4px 8px,
+    'min-width': 1.5rem,     // 24px
+    'height': 1.5rem
+  ),
+  'base': (
+    'font-size': 1rem,       // 16px
+    'padding': 4px 12px,
+    'min-width': 2rem,       // 32px
+    'height': 2rem
+  ),
+  'lg': (
+    'font-size': 1.125rem,   // 18px
+    'padding': 6px 16px,
+    'min-width': 2.5rem,     // 40px
+    'height': 2.5rem
+  ),
+  'xl': (
+    'font-size': 1.25rem,    // 20px
+    'padding': 8px 20px,
+    'min-width': 3rem,       // 48px
+    'height': 3rem
+  )
+);
+
+$badge-variants: (
+  'primary': (
+    'bg': $color-primario,
+    'color': white,
+    'border': $color-primario
+  ),
+  'secondary': (
+    'bg': $color-secundario,
+    'color': white,
+    'border': $color-secundario
+  ),
+  'success': (
+    'bg': $alert-success-bg,
+    'color': $alert-success-text,
+    'border': $alert-success-border
+  ),
+  'warning': (
+    'bg': $alert-warning-bg,
+    'color': $alert-warning-text,
+    'border': $alert-warning-border
+  ),
+  'error': (
+    'bg': $alert-error-bg,
+    'color': $alert-error-text,
+    'border': $alert-error-border
+  ),
+  'info': (
+    'bg': $alert-info-bg,
+    'color': $alert-info-text,
+    'border': $alert-info-border
+  ),
+  'light': (
+    'bg': #f8f9fa,
+    'color': #495057,
+    'border': #dee2e6
+  ),
+  'dark': (
+    'bg': #343a40,
+    'color': white,
+    'border': #343a40
+  )
+);
+
+// =============================================================================
+// MIXINS PARA BADGES
+// =============================================================================
+
+@mixin badge-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: map.get($border-radius, 'base');
+  transition: map.get($transitions, 'all');
+  position: relative;
+  
+  // Evitar que el texto se rompa
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
+@mixin badge-size($size: 'base') {
+  $size-config: map.get($badge-sizes, $size);
+  
+  font-size: map.get($size-config, 'font-size');
+  padding: map.get($size-config, 'padding');
+  min-width: map.get($size-config, 'min-width');
+  height: map.get($size-config, 'height');
+}
 
-//mixmin
-@mixin badge1($color,$bgColor,$shadoColor) {
-    @extend .badge;
-    color: $color;
-    background: $bgColor;
-    border-radius: 5px;
-    box-shadow: 3px -20px 24px -10px $shadoColor;
-    &::before {
-        content: attr(data-badge);
-        font-size: 14px;
-        position: absolute;
-        left: 93%;
-        bottom: 70%;
-        background: #ffffff;
-        padding: 4px 5px;
-        border-radius: 50%;
-    }
-    
+@mixin badge-variant($variant: 'primary') {
+  $variant-config: map.get($badge-variants, $variant);
+  
+  background-color: map.get($variant-config, 'bg');
+  color: map.get($variant-config, 'color');
+  border: 1px solid map.get($variant-config, 'border');
+}
+
+@mixin badge-with-notification($bg-color: #dc3545, $text-color: white) {
+  &::before {
+    content: attr(data-badge);
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: $bg-color;
+    color: $text-color;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
   }
   
+  &[data-badge=""]::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    padding: 0;
+  }
+}
 
+@mixin badge-shadow($color: rgba(0, 0, 0, 0.15)) {
+  box-shadow: 0 4px 12px $color;
+  
+  &:hover {
+    box-shadow: 0 6px 16px $color;
+    transform: translateY(-1px);
+  }
+}
+
+// =============================================================================
+// ESTILOS BASE
+// =============================================================================
+
+.badge {
+  @include badge-base;
+  @include badge-size('base');
+  @include badge-variant('primary');
+}
+
+// =============================================================================
+// TAMAÑOS DE BADGES
+// =============================================================================
+
+@each $size, $config in $badge-sizes {
+  .badge-#{$size} {
+    @include badge-size($size);
+  }
+}
+
+// =============================================================================
+// VARIANTES DE COLOR
+// =============================================================================
+
+@each $variant, $config in $badge-variants {
+  .badge-#{$variant} {
+    @include badge-variant($variant);
+  }
+}
+
+// =============================================================================
+// ESTILOS ESPECIALES
+// =============================================================================
+
+// Badge con notificación
+.badge-notification {
+  @include badge-with-notification();
+}
+
+.badge-notification-success {
+  @include badge-with-notification($alert-success-border, white);
+}
+
+.badge-notification-warning {
+  @include badge-with-notification($alert-warning-border, $alert-warning-text);
+}
+
+// Badge redondeado (píldora)
+.badge-pill {
+  border-radius: 50rem;
+}
+
+// Badge con sombra
+.badge-shadow {
+  @include badge-shadow();
+}
+
+// Badge con gradiente
+.badge-gradient {
+  &-primary {
+    background: linear-gradient(135deg, $color-primario, $color-secundario);
+    color: white;
+    border: none;
+  }
+  
+  &-success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border: none;
+  }
+  
+  &-warning {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    color: #212529;
+    border: none;
+  }
+  
+  &-error {
+    background: linear-gradient(135deg, #dc3545, #e83e8c);
+    color: white;
+    border: none;
+  }
+}
+
+// Badge outline (solo borde)
+.badge-outline {
+  &-primary {
+    background: transparent;
+    color: $color-primario;
+    border: 2px solid $color-primario;
+  }
+  
+  &-secondary {
+    background: transparent;
+    color: $color-secundario;
+    border: 2px solid $color-secundario;
+  }
+  
+  &-success {
+    background: transparent;
+    color: $alert-success-text;
+    border: 2px solid $alert-success-border;
+  }
+  
+  &-error {
+    background: transparent;
+    color: $alert-error-text;
+    border: 2px solid $alert-error-border;
+  }
+}
+
+// Badge con animación
+.badge-animated {
+  animation: badge-pulse 2s infinite;
+  
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes badge-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+// Badge removible
+.badge-dismissible {
+  padding-right: 2rem;
+  
+  .badge-close {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1.2em;
+    line-height: 1;
+    opacity: 0.7;
+    padding: 0;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// =============================================================================
+// BADGES COMPATIBLES CON VERSIÓN ANTERIOR
+// =============================================================================
+
+// Mixin mejorado (compatible con anterior)
+@mixin badge-custom($color, $bg-color, $shadow-color: rgba(0, 0, 0, 0.2)) {
+  @include badge-base;
+  color: $color;
+  background: $bg-color;
+  border-radius: map.get($border-radius, 'md');
+  @include badge-shadow($shadow-color);
+  @include badge-with-notification();
+}
+
+// Badges originales mejorados
 .badge1 {
-    @extend .badge;
-    @include badge1(rgb(117, 107, 91),burlywood,rgba(0, 0, 0, .75) );
+  @include badge-custom(rgb(117, 107, 91), burlywood, rgba(0, 0, 0, 0.3));
 }
 
 .badge2 {
-    @extend .badge;
-    @include badge1(rgb(1, 191, 255),rgb(67, 0, 67),rgba(5, 93, 147, 0.747) );
-
+  @include badge-custom(rgb(1, 191, 255), rgb(67, 0, 67), rgba(5, 93, 147, 0.4));
 }
 
 .badge3 {
-    @extend .badge;
-    @include badge1( $colorbg-primarioC,$color-primarioC,$color-secundarioC );
+  @include badge-custom($colorbg-primarioC, $color-primarioC, $color-secundarioC);
 }
 
 .badge4 {
-    background-color: blue;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-family: 'Cursive', sans-serif;
-    font-family: 'Cursive', sans-serif;
+  @include badge-base;
+  @include badge-size('base');
+  background-color: #007bff;
+  color: white;
+  font-family: 'Cursive', sans-serif;
+  border-radius: map.get($border-radius, 'lg');
 }
 
 .badge5 {
-    background-color: #3498db;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-family: 'Cursive', sans-serif;
+  @include badge-base;
+  @include badge-size('base');
+  background-color: #3498db;
+  color: white;
+  font-family: 'Cursive', sans-serif;
+  border-radius: map.get($border-radius, 'lg');
 }
 
 .badge6 {
-
-    background-color: #e74c3c;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-family: 'Cursive', sans-serif;
+  @include badge-base;
+  @include badge-size('base');
+  background-color: #e74c3c;
+  color: white;
+  font-family: 'Cursive', sans-serif;
+  border-radius: map.get($border-radius, 'lg');
 }
 
 .badgeCorinto {
-    @extend .badge;
-    color: rgb(0, 0, 0);
-    background: linear-gradient(45deg, #d46c2b, #f8bb03);
-    border: 3px solid;
-    box-shadow: 0 0 20px rgba(0, 78, 33, 0.747);
+  @include badge-base;
+  @include badge-size('lg');
+  color: rgb(0, 0, 0);
+  background: linear-gradient(45deg, #d46c2b, #f8bb03);
+  border: 3px solid transparent;
+  box-shadow: 0 0 20px rgba(0, 78, 33, 0.5);
+  font-weight: 600;
+}
+
+// =============================================================================
+// UTILIDADES ADICIONALES
+// =============================================================================
+
+// Grupos de badges
+.badge-group {
+  display: inline-flex;
+  gap: 4px;
+  
+  .badge {
+    &:not(:last-child) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    &:not(:first-child) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
+
+// Badge flotante
+.badge-float {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  box-shadow: map.get($shadows, 'lg');
+}
+
+// Badge con icono
+.badge-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  
+  .icon {
+    width: 1em;
+    height: 1em;
+  }
 }

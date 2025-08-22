@@ -1,81 +1,432 @@
-@import 'Variables';
+@use 'Variables' as *;
+@use 'sass:map';
+@use 'sass:color';
 
+// =============================================================================
+// CONFIGURACIÓN DE FONDOS
+// =============================================================================
+
+$background-colors: (
+  // Paleta A - Principal
+  'primary-a': $colorbg-primario,
+  'secondary-a': $colorBg-secundario,
+  'accent-a': $color-primario,
+  
+  // Paleta B - Rojo/Negro
+  'primary-b': $colorbg-primarioB,
+  'secondary-b': $colorBg-secundarioB,
+  'accent-b': $color-primarioB,
+  
+  // Paleta C - Azul/Púrpura claro
+  'primary-c': $colorbg-primarioC,
+  'secondary-c': $colorBg-secundarioC,
+  'accent-c': $color-primarioC,
+  
+  // Paleta D - Azul oscuro/Púrpura
+  'primary-d': $colorbg-primarioD,
+  'secondary-d': $colorBg-secundarioD,
+  'accent-d': $color-primarioD,
+  
+  // Colores del sistema
+  'white': #ffffff,
+  'light': #f8f9fa,
+  'light-gray': #e9ecef,
+  'gray': #6c757d,
+  'dark-gray': #495057,
+  'dark': #212529,
+  'black': #000000,
+  
+  // Colores semánticos
+  'success': $alert-success-bg,
+  'warning': $alert-warning-bg,
+  'error': $alert-error-bg,
+  'info': $alert-info-bg,
+  
+  // Colores básicos mejorados
+  'red': #dc3545,
+  'red-light': #f8d7da,
+  'blue': #007bff,
+  'blue-light': #cce7ff,
+  'green': #28a745,
+  'green-light': #d4edda,
+  'yellow': #ffc107,
+  'yellow-light': #fff3cd,
+  'purple': #6f42c1,
+  'purple-light': #e2d9f3,
+  'orange': #fd7e14,
+  'orange-light': #ffe8d4,
+  'pink': #e83e8c,
+  'pink-light': #f7d6e6,
+  'teal': #20c997,
+  'teal-light': #c7f0e6,
+  'cyan': #17a2b8,
+  'cyan-light': #c6ebf0,
+  
+  // Transparencias
+  'transparent': transparent,
+  'black-10': rgba(0, 0, 0, 0.1),
+  'black-25': rgba(0, 0, 0, 0.25),
+  'black-50': rgba(0, 0, 0, 0.5),
+  'black-75': rgba(0, 0, 0, 0.75),
+  'white-10': rgba(255, 255, 255, 0.1),
+  'white-25': rgba(255, 255, 255, 0.25),
+  'white-50': rgba(255, 255, 255, 0.5),
+  'white-75': rgba(255, 255, 255, 0.75)
+);
+
+$gradient-backgrounds: (
+  'primary': linear-gradient(135deg, $color-primario, $color-secundario),
+  'secondary': linear-gradient(135deg, $color-secundario, $color-primario),
+  'success': linear-gradient(135deg, #28a745, #20c997),
+  'warning': linear-gradient(135deg, #ffc107, #fd7e14),
+  'error': linear-gradient(135deg, #dc3545, #e83e8c),
+  'info': linear-gradient(135deg, #17a2b8, #007bff),
+  'dark': linear-gradient(135deg, #495057, #212529),
+  'light': linear-gradient(135deg, #f8f9fa, #e9ecef),
+  'sunset': linear-gradient(135deg, #ff9a9e, #fecfef),
+  'ocean': linear-gradient(135deg, #a8edea, #fed6e3),
+  'purple': linear-gradient(135deg, #667eea, #764ba2),
+  'orange': linear-gradient(135deg, #f093fb, #f5576c),
+  'green': linear-gradient(135deg, #4facfe, #00f2fe),
+  'night': linear-gradient(135deg, #0c0c0c, #2d1b69),
+  'cosmic': linear-gradient(135deg, #ff00cc, #333399)
+);
+
+// =============================================================================
+// MIXINS PARA FONDOS
+// =============================================================================
+
+@mixin background-color($color-key) {
+  background-color: map.get($background-colors, $color-key);
+}
+
+@mixin background-gradient($gradient-key) {
+  background: map.get($gradient-backgrounds, $gradient-key);
+}
+
+@mixin background-pattern($pattern: 'dots', $color: rgba(255, 255, 255, 0.1)) {
+  @if $pattern == 'dots' {
+    background-image: radial-gradient(circle, $color 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  @if $pattern == 'lines' {
+    background-image: linear-gradient(45deg, $color 25%, transparent 25%);
+    background-size: 20px 20px;
+  }
+  
+  @if $pattern == 'grid' {
+    background-image: 
+      linear-gradient($color 1px, transparent 1px),
+      linear-gradient(90deg, $color 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+@mixin background-overlay($color: rgba(0, 0, 0, 0.5)) {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $color;
+    z-index: 1;
+  }
+  
+  > * {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+// =============================================================================
+// CLASES DE FONDO BÁSICAS
+// =============================================================================
+
+// Generador automático de clases de color sólido
+@each $name, $color in $background-colors {
+  .bg-#{$name} {
+    @include background-color($name);
+  }
+}
+
+// Generador automático de clases de gradientes
+@each $name, $gradient in $gradient-backgrounds {
+  .bg-gradient-#{$name} {
+    @include background-gradient($name);
+  }
+}
+
+// =============================================================================
+// COMPATIBILIDAD CON NOMBRES ANTERIORES
+// =============================================================================
+
+// Nombres originales mantenidos
 .Bg-Base {
-    background-color: $colorbg-primario;
-
+  @include background-color('primary-a');
 }
 
 .Bg-gray {
-    background-color: $GrayRdBg;
-
+  background: $GrayRdBg;
 }
 
 .Bg_tema {
-    background-color: $colorbg-primario;
-
+  @include background-color('primary-a');
 }
 
 .Bg_tema2 {
-    background-color: $colorBg-secundario;
-
+  @include background-color('secondary-a');
 }
 
 .Bg_temaB {
-    background-color: $colorbg-primarioB;
-
+  @include background-color('primary-b');
 }
 
 .Bg_tema2B {
-    background-color: $colorBg-secundarioB;
-
+  @include background-color('secondary-b');
 }
 
 .Bg_temaC {
-    background-color: $colorbg-primarioC;
-
-}
-
-.Bg_temaD {
-    background-color: $colorBg-secundarioD;
-
+  @include background-color('primary-c');
 }
 
 .Bg_tema2C {
-    background-color: $colorBg-secundarioC;
-
+  @include background-color('secondary-c');
 }
 
 .Bg_temaD {
-    background-color: $colorbg-primarioD;
-
+  @include background-color('primary-d');
 }
 
 .Bg_tema2D {
-    background-color: $colorBg-secundarioD;
-
+  @include background-color('secondary-d');
 }
 
 .Bg_temaWeb3 {
-    background-color:  rgb(60, 7, 83);
-
+  background-color: rgb(60, 7, 83);
 }
 
 .Bg-dark {
-    background-color: rgba(0, 0, 0, 0.668);
+  @include background-color('black-75');
 }
 
 .Bg-Red {
-    background-color: lightcoral;
+  @include background-color('red-light');
 }
 
 .Bg-Blue {
-    background-color: lightblue;
+  @include background-color('blue-light');
 }
 
 .Bg-Green {
-    background-color: lightgreen;
+  @include background-color('green-light');
 }
 
 .Bg-Yellow {
-    background-color: lightyellow;
+  @include background-color('yellow-light');
+}
+
+// =============================================================================
+// CLASES DE PATRONES Y TEXTURAS
+// =============================================================================
+
+.bg-pattern {
+  &-dots {
+    @include background-pattern('dots');
+  }
+  
+  &-lines {
+    @include background-pattern('lines');
+  }
+  
+  &-grid {
+    @include background-pattern('grid');
+  }
+  
+  &-dots-dark {
+    @include background-pattern('dots', rgba(0, 0, 0, 0.1));
+  }
+  
+  &-lines-dark {
+    @include background-pattern('lines', rgba(0, 0, 0, 0.1));
+  }
+}
+
+// =============================================================================
+// CLASES DE OVERLAY
+// =============================================================================
+
+.bg-overlay {
+  @include background-overlay();
+  
+  &-light {
+    @include background-overlay(rgba(255, 255, 255, 0.5));
+  }
+  
+  &-dark {
+    @include background-overlay(rgba(0, 0, 0, 0.5));
+  }
+  
+  &-primary {
+    @include background-overlay(rgba($color-primario, 0.5));
+  }
+  
+  &-success {
+    @include background-overlay(rgba(#28a745, 0.5));
+  }
+  
+  &-warning {
+    @include background-overlay(rgba(#ffc107, 0.5));
+  }
+  
+  &-error {
+    @include background-overlay(rgba(#dc3545, 0.5));
+  }
+}
+
+// =============================================================================
+// MODIFICADORES DE FONDO
+// =============================================================================
+
+// Fondos con animación
+.bg-animated {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+// Fondos fijos (no scroll)
+.bg-fixed {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+// Fondos con parallax
+.bg-parallax {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+// =============================================================================
+// UTILIDADES DE FONDO
+// =============================================================================
+
+// Tamaños de fondo
+.bg-cover {
+  background-size: cover;
+}
+
+.bg-contain {
+  background-size: contain;
+}
+
+.bg-auto {
+  background-size: auto;
+}
+
+// Posiciones de fondo
+.bg-center {
+  background-position: center;
+}
+
+.bg-top {
+  background-position: top;
+}
+
+.bg-bottom {
+  background-position: bottom;
+}
+
+.bg-left {
+  background-position: left;
+}
+
+.bg-right {
+  background-position: right;
+}
+
+// Repetición de fondo
+.bg-repeat {
+  background-repeat: repeat;
+}
+
+.bg-no-repeat {
+  background-repeat: no-repeat;
+}
+
+.bg-repeat-x {
+  background-repeat: repeat-x;
+}
+
+.bg-repeat-y {
+  background-repeat: repeat-y;
+}
+
+// =============================================================================
+// TEMAS COMPLETOS
+// =============================================================================
+
+// Tema oscuro completo
+.theme-dark {
+  @include background-color('dark');
+  color: map.get($font-colors, 'base');
+  
+  .card, .modal, .dropdown-menu {
+    @include background-color('dark-gray');
+    color: map.get($font-colors, 'base');
+  }
+}
+
+// Tema claro completo
+.theme-light {
+  @include background-color('light');
+  color: map.get($font-colors, 'dark');
+  
+  .card, .modal, .dropdown-menu {
+    @include background-color('white');
+    color: map.get($font-colors, 'dark');
+  }
+}
+
+// Tema personalizado A
+.theme-custom-a {
+  @include background-color('primary-a');
+  color: map.get($font-colors, 'base');
+}
+
+// Tema personalizado B
+.theme-custom-b {
+  @include background-gradient('primary');
+  color: map.get($font-colors, 'base');
+}
+
+// =============================================================================
+// RESPONSIVE BACKGROUNDS
+// =============================================================================
+
+@media (max-width: map.get($breakpoints, 'md')) {
+  .bg-mobile-hide {
+    background-image: none !important;
+    background-color: map.get($background-colors, 'light');
+  }
+  
+  .bg-mobile-dark {
+    @include background-color('dark');
+  }
+  
+  .bg-mobile-light {
+    @include background-color('light');
+  }
 }

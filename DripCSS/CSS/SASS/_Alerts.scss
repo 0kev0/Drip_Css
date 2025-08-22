@@ -1,7 +1,10 @@
-@import 'Variables';
-// Estilos base para todas las alertas
+@use 'Variables' as *;
 
-.alert {
+// =============================================================================
+// MIXINS PARA ALERTAS
+// =============================================================================
+
+@mixin alert-base {
   padding: 10px 15px;
   border-radius: 4px;
   position: relative;
@@ -11,10 +14,10 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
 
-  &:hover {// Levanta la alerta al hacer hover
+  &:hover {
     opacity: 1;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    transform: translateY(-5px); 
+    transform: translateY(-5px);
   }
 
   &.closeable {
@@ -37,50 +40,63 @@
   }
 }
 
-@mixin borderSolid($colorbg,$colorBorder,$Size,$txt_color) {
-  background-color: $alert-success-bg;
-  border: Size solid $colorBorder;
-  color: $txt_color;
-}
-// Estilos para la alerta de éxito
-.alert-success  {
-  @extend .alert;
-  @include borderSolid($alert-success-bg, $alert-success-border ,  1px,$alert-success-text );
-  background-color: $alert-success-bg;
-  border: 1px solid $alert-success-border;
-  color: $alert-success-text;
+@mixin alert-variant($bg-color, $border-color, $text-color, $border-size: 1px) {
+  @include alert-base;
+  background-color: $bg-color;
+  border: $border-size solid $border-color;
+  color: $text-color;
 }
 
-// Estilos para la alerta de error
+// =============================================================================
+// ESTILOS BASE PARA ALERTAS
+// =============================================================================
+
+.alert {
+  @include alert-base;
+}
+
+// =============================================================================
+// VARIANTES DE ALERTAS
+// =============================================================================
+
+// Alerta de éxito
+.alert-success {
+  @include alert-variant($alert-success-bg,
+    $alert-success-border,
+    $alert-success-text );
+}
+
+// Alerta de error
 .alert-error {
-  @extend .alert;
-  background-color: $alert-error-bg;
-  border: 1px solid $alert-error-border;
-  color: $alert-error-text;
-  
+  @include alert-variant($alert-error-bg,
+    $alert-error-border,
+    $alert-error-text );
 }
 
-// Estilos para la alerta de advertencia
+// Alerta de advertencia
 .alert-warning {
-  @extend .alert;
-  background-color: $alert-warning-bg;
-  border: 1px solid $alert-warning-border;
-  color: $alert-warning-text;
+  @include alert-variant($alert-warning-bg,
+    $alert-warning-border,
+    $alert-warning-text );
 }
 
-// Estilos para la alerta de información
+// Alerta de información
 .alert-info {
-  @extend .alert;
-  background-color: $alert-info-bg;
-  border: 1px solid $alert-info-border;
-  color: $alert-info-text;
+  @include alert-variant($alert-info-bg,
+    $alert-info-border,
+    $alert-info-text );
 }
+
+// =============================================================================
+// ANIMACIONES
+// =============================================================================
 
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 0.9;
@@ -92,17 +108,108 @@
     transform: translateX(0);
     opacity: 0.9;
   }
+
   to {
     transform: translateX(100%);
     opacity: 0;
   }
 }
 
-// Aplicar animación de movimiento a las alertas
-.alert.slide-in-right {
-  animation: slideInRight 0.5s forwards;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 0.9;
+    transform: scale(1);
+  }
 }
 
-.alert.slide-out-right {
-  animation: slideOutRight 0.5s forwards;
+@keyframes fadeOut {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+// =============================================================================
+// CLASES DE ANIMACIÓN
+// =============================================================================
+
+.alert {
+  &.slide-in-right {
+    animation: slideInRight 0.5s forwards;
+  }
+
+  &.slide-out-right {
+    animation: slideOutRight 0.5s forwards;
+  }
+
+  &.fade-in {
+    animation: fadeIn 0.3s forwards;
+  }
+
+  &.fade-out {
+    animation: fadeOut 0.3s forwards;
+  }
+
+  // Variantes de duración
+  &.fast {
+    animation-duration: 0.2s;
+    transition-duration: 0.2s;
+  }
+
+  &.slow {
+    animation-duration: 0.8s;
+    transition-duration: 0.8s;
+  }
+}
+
+// =============================================================================
+// MODIFICADORES ADICIONALES
+// =============================================================================
+
+.alert {
+
+  // Tamaños
+  &.alert-sm {
+    padding: 8px 12px;
+    font-size: 0.875rem;
+  }
+
+  &.alert-lg {
+    padding: 15px 20px;
+    font-size: 1.125rem;
+  }
+
+  // Posiciones fijas
+  &.alert-fixed {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 400px;
+    z-index: 10000;
+  }
+
+  // Sin sombra
+  &.alert-flat {
+    box-shadow: none;
+
+    &:hover {
+      box-shadow: none;
+      transform: none;
+    }
+  }
+
+  // Redondeado completo
+  &.alert-rounded {
+    border-radius: 25px;
+  }
 }

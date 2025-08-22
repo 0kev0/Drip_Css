@@ -1,175 +1,284 @@
 @import 'Variables';
 
-.Display-flex {
+// =============================================================================
+// FLEXBOX BASE UTILITIES
+// =============================================================================
+
+// Flex container base
+%flex-base {
   display: flex;
+}
+
+// =============================================================================
+// FLEX DIRECTION
+// =============================================================================
+
+.flex {
+  @extend %flex-base;
   flex-direction: row;
   align-items: center;
   gap: 10px;
 }
 
-.Display-flex-row {
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
+.flex-row {
+  @extend %flex-base;
   flex-direction: row;
   align-items: flex-start;
+  margin: 0 auto;
   height: auto;
 }
 
-.Display-flex-column {
-  display: flex;
+.flex-column {
+  @extend %flex-base;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
 
-.Display-flex-row-reverse {
-  display: flex;
+.flex-row-reverse {
+  @extend %flex-base;
   flex-direction: row-reverse;
   align-items: center;
   gap: 10px;
 }
 
-.Display-flex-wrap {
-  display: flex;
+// =============================================================================
+// FLEX WRAP
+// =============================================================================
+
+.flex-wrap {
+  @extend %flex-base;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 }
 
-.Display-flex-justify-start {
-  display: flex;
+.flex-nowrap {
+  @extend %flex-base;
+  flex-wrap: nowrap;
+}
+
+// =============================================================================
+// JUSTIFY CONTENT
+// =============================================================================
+
+.justify-start {
   justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
 }
 
-.Display-flex-justify-end {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-}
-
-.Display-flex-justify-around {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 10px;
-}
-
-.Display-flex-justify-evenly {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  gap: 10px;
-}
-
-
-.Display-flex-align-start {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.Display-flex-align-end {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-}
-
-.Display-flex-align-baseline {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
-
-
-.justfy_center {
+.justify-center {
   justify-content: center;
-  justify-items: center;
-
 }
 
-.justfy_Between {
-  justify-content: space-between
+.justify-end {
+  justify-content: flex-end;
 }
 
-.justfy_Evenly {
-  justify-content: space-evenly
+.justify-between {
+  justify-content: space-between;
 }
 
-.align_center {
-  text-align: center;
+.justify-around {
+  justify-content: space-around;
 }
 
+.justify-evenly {
+  justify-content: space-evenly;
+}
 
-.-col {
-  @extend .Display-flex;
+// =============================================================================
+// ALIGN ITEMS
+// =============================================================================
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.items-stretch {
+  align-items: stretch;
+}
+
+.items-baseline {
+  align-items: baseline;
+}
+
+// =============================================================================
+// COMBINED UTILITIES (más comunes)
+// =============================================================================
+
+.flex-center {
+  @extend %flex-base;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-center-column {
+  @extend .flex-center;
   flex-direction: column;
 }
 
-.-center {
-  @extend .Display-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.centrado-horizontal {
-  display: flex;
-  justify-content: center;
-}
-
-
-.centrado-vertical {
-  display: flex;
+.flex-between {
+  @extend %flex-base;
+  justify-content: space-between;
   align-items: center;
 }
 
-.centrado-horizontal-vertical {
-  display: flex;
-  justify-content: center;
+.flex-start {
+  @extend %flex-base;
+  justify-content: flex-start;
   align-items: center;
 }
 
-.centrado-flexbox {
-  display: flex;
-  justify-content: center;
+.flex-end {
+  @extend %flex-base;
+  justify-content: flex-end;
   align-items: center;
 }
 
-.centrado-absoluto {
+// =============================================================================
+// CENTERING UTILITIES
+// =============================================================================
+
+.center-horizontal {
+  @extend %flex-base;
+  justify-content: center;
+}
+
+.center-vertical {
+  @extend %flex-base;
+  align-items: center;
+}
+
+.center-absolute {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.txt_center {
+// =============================================================================
+// TEXT ALIGNMENT
+// =============================================================================
+
+.text-center {
   text-align: center;
 }
 
-
-
-.-left {
-  @extend .Display-flex;
-  align-items: center;
-  justify-content: left;
+.text-left {
+  text-align: left;
 }
 
-.mid_screen {
+.text-right {
+  text-align: right;
+}
+
+// =============================================================================
+// HEIGHT UTILITIES
+// =============================================================================
+
+.h-screen-70 {
   height: 70vh;
 }
 
-.small_scrren {
+.h-screen-40 {
   height: 40vh;
-
 }
 
-.Gap-sm {
+.h-full {
+  height: 100%;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+// =============================================================================
+// GAP UTILITIES
+// =============================================================================
+
+.gap-xs {
+  gap: $extra-small;
+}
+
+.gap-sm {
   gap: $small;
 }
 
-.Gap-xl {
+.gap-md {
+  gap: $medium;
+}
+
+.gap-lg {
   gap: $large;
+}
+
+.gap-xl {
+  gap: $extra-large;
+}
+
+// Gap específicos para row y column
+.gap-x-sm {
+  column-gap: $small;
+}
+
+.gap-y-sm {
+  row-gap: $small;
+}
+
+.gap-x-lg {
+  column-gap: $large;
+}
+
+.gap-y-lg {
+  row-gap: $large;
+}
+
+// =============================================================================
+// RESPONSIVE UTILITIES (opcional)
+// =============================================================================
+
+@media (max-width: 768px) {
+  .flex-mobile-column {
+    flex-direction: column !important;
+  }
+  
+  .flex-mobile-wrap {
+    flex-wrap: wrap !important;
+  }
+}
+
+// =============================================================================
+// FLEX GROW/SHRINK UTILITIES
+// =============================================================================
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.flex-none {
+  flex: none;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.shrink {
+  flex-shrink: 1;
+}
+
+.no-shrink {
+  flex-shrink: 0;
 }

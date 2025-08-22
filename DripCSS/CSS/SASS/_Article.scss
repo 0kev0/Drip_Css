@@ -1,59 +1,287 @@
-@import 'Variables';
+@use 'Variables' as *;
+@use 'sass:map';
 
-.article-col_1 {
-    margin: 0 15%;
+// =============================================================================
+// VARIABLES Y CONFIGURACIÓN
+// =============================================================================
+
+$article-breakpoints: (
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px
+);
+
+$article-margins: (
+  'default': (0 15%),
+  'narrow': (0 10%),
+  'wide': (0 20%),
+  'mobile': (20px)
+);
+
+// =============================================================================
+// MIXINS PARA ARTICLES
+// =============================================================================
+
+@mixin article-responsive($columns: 1) {
+  @if $columns == 1 {
+    margin: map.get($article-margins, 'default');
     align-items: center;
-}
-
-
-.article-col_2 {
+    
+    @media (max-width: map.get($article-breakpoints, 'md')) {
+      margin: map.get($article-margins, 'mobile');
+    }
+  }
+  
+  @if $columns == 2 {
     column-count: 2;
+    column-gap: 2rem;
     margin: 20px 40px;
-
-}
-
-.article-col_3 {
+    
+    @media (max-width: map.get($article-breakpoints, 'md')) {
+      column-count: 1;
+      margin: 20px;
+    }
+  }
+  
+  @if $columns == 3 {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    
+    @media (max-width: map.get($article-breakpoints, 'lg')) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @media (max-width: map.get($article-breakpoints, 'md')) {
+      grid-template-columns: 1fr;
+    }
+  }
 }
 
+@mixin text-highlight($bg-color, $display: null, $padding: 2px 4px, $border-radius: 3px) {
+  background-color: $bg-color;
+  padding: $padding;
+  border-radius: $border-radius;
+  
+  @if $display {
+    display: $display;
+  }
+}
+
+// =============================================================================
+// LAYOUTS DE ARTÍCULOS
+// =============================================================================
+
+.article {
+  // Base común para todos los artículos
+  line-height: 1.6;
+  
+  &-col {
+    // Columna única
+    &_1 {
+      @include article-responsive(1);
+    }
+    
+    // Dos columnas
+    &_2 {
+      @include article-responsive(2);
+    }
+    
+    // Tres columnas
+    &_3 {
+      @include article-responsive(3);
+    }
+    
+    // Variantes adicionales
+    &_auto {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    &_masonry {
+      column-count: 3;
+      column-gap: 20px;
+      column-fill: balance;
+      
+      @media (max-width: map.get($article-breakpoints, 'lg')) {
+        column-count: 2;
+      }
+      
+      @media (max-width: map.get($article-breakpoints, 'md')) {
+        column-count: 1;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// TEXTO SUBRAYADO/DESTACADO
+// =============================================================================
+
+.txt-subrayado {
+  // Base para texto destacado
+  @include text-highlight($color-primarioB);
+  
+  // Variantes de color
+  &A {
+    &_block {
+      @include text-highlight($color-primario, block);
+    }
+    
+    &_inline {
+      @include text-highlight($color-primario, inline);
+    }
+  }
+  
+  &B {
+    @include text-highlight($color-primarioB);
+    
+    &_block {
+      @include text-highlight($color-primarioB, block);
+    }
+  }
+  
+  &C {
+    @include text-highlight($color-primarioC);
+  }
+  
+  &D {
+    @include text-highlight($color-primarioD);
+    
+    &_inline {
+      @include text-highlight($colorBg-secundarioD, inline);
+    }
+  }
+}
+
+// Compatibilidad con nombres existentes
 .txt-subrayadoTemaA_block {
-    background-color: $color-primario;
-    display: block;
+  @extend .txt-subrayadoA_block;
 }
 
 .txt-subrayadoTemaA_inline {
-    background-color: $color-primario;
-    display: inline !important;
-}
-
-.txt-subrayado {
-    background-color: $color-primarioB;
+  @extend .txt-subrayadoA_inline;
 }
 
 .txt-subrayadoB {
-    background-color: $color-primarioB;
+  @extend .txt-subrayadoB;
 }
 
 .txt-subrayadoC {
-    background-color: $color-primarioC;
+  @extend .txt-subrayadoC;
 }
 
 .txt-subrayadoD {
-    background-color: $color-primarioD;
+  @extend .txt-subrayadoD;
 }
 
 .txt-subrayado_block {
-    background-color: $color-primarioB;
-    display: block;
+  @extend .txt-subrayadoB_block;
 }
 
 .txt-subrayado_inlineD {
-    background-color: $colorBg-secundarioD;
-    display: inline;
+  @extend .txt-subrayadoD_inline;
 }
 
-.article-bordered {
-    border: 1px solid black;
+// =============================================================================
+// MODIFICADORES DE ARTÍCULOS
+// =============================================================================
+
+.article {
+  // Bordes
+  &-bordered {
+    border: 1px solid $border-color-default;
+    padding: 20px;
+    border-radius: 4px;
+    
+    &-thick {
+      border-width: 2px;
+    }
+    
+    &-dashed {
+      border-style: dashed;
+    }
+    
+    &-rounded {
+      border-radius: 12px;
+    }
+  }
+  
+  // Espaciado
+  &-compact {
+    .article-col_1 { margin: 0 5%; }
+    .article-col_2 { margin: 10px 20px; }
+    .article-col_3 { gap: 10px; }
+  }
+  
+  &-spacious {
+    .article-col_1 { margin: 0 25%; }
+    .article-col_2 { margin: 30px 60px; }
+    .article-col_3 { gap: 30px; }
+  }
+  
+  // Sombras
+  &-shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      transition: box-shadow 0.3s ease;
+    }
+  }
+  
+  // Fondos
+  &-bg {
+    &-light {
+      background-color: $bg-light;
+      padding: 20px;
+    }
+    
+    &-dark {
+      background-color: $bg-dark;
+      color: $text-light;
+      padding: 20px;
+    }
+    
+    &-gradient {
+      background: linear-gradient(135deg, $color-primario, $color-secundario);
+      color: white;
+      padding: 20px;
+    }
+  }
+}
+
+// =============================================================================
+// UTILIDADES ESPECÍFICAS DE TEXTO
+// =============================================================================
+
+.text-highlight {
+  // Variantes de intensidad
+  &-subtle {
+    @include text-highlight($color-primarioB, null, 1px 2px, 2px);
+    opacity: 0.8;
+  }
+  
+  &-strong {
+    @include text-highlight($color-primario, null, 4px 8px, 6px);
+    font-weight: 600;
+  }
+  
+  // Variantes de estilo
+  &-underline {
+    background: linear-gradient(to right, $color-primario 0%, $color-primario 100%);
+    background-size: 100% 2px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    padding-bottom: 2px;
+  }
+  
+  &-box {
+    @include text-highlight($color-primarioC, null, 8px 12px, 8px);
+    border-left: 4px solid $color-primario;
+    margin: 10px 0;
+    display: block;
+  }
 }

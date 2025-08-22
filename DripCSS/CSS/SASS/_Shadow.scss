@@ -1,100 +1,358 @@
 @import 'Variables';
 
-.text-shadow-bottom {
-    text-shadow: 2px 2px 6px lighten($color: $FontColorBase, $amount: 10);
+// ===== SHADOW SYSTEM VARIABLES =====
+
+// Shadow levels for consistent design
+$shadow-levels: (
+  'xs': (0px 1px 2px rgba(0, 0, 0, 0.05)),
+  'sm': (0px 2px 4px rgba(0, 0, 0, 0.1)),
+  'md': (0px 4px 8px rgba(0, 0, 0, 0.15)),
+  'lg': (0px 8px 16px rgba(0, 0, 0, 0.2)),
+  'xl': (0px 16px 32px rgba(0, 0, 0, 0.25)),
+  '2xl': (0px 24px 48px rgba(0, 0, 0, 0.3))
+) !default;
+
+// Directional shadow offsets
+$shadow-directions: (
+  'top': (0, -1),
+  'right': (1, 0),
+  'bottom': (0, 1),
+  'left': (-1, 0),
+  'top-left': (-1, -1),
+  'top-right': (1, -1),
+  'bottom-left': (-1, 1),
+  'bottom-right': (1, 1)
+) !default;
+
+// ===== SHADOW UTILITY FUNCTIONS =====
+
+/**
+ * Obtiene un valor de sombra del mapa de niveles
+ * @param {String} $level - El nivel de sombra (xs, sm, md, lg, xl, 2xl)
+ * @return {String} - Valor de box-shadow
+ */
+@function get-shadow($level) {
+  @if map-has-key($shadow-levels, $level) {
+    @return map-get($shadow-levels, $level);
+  } @else {
+    @warn "Shadow level '#{$level}' not found. Available levels: #{map-keys($shadow-levels)}";
+    @return 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
 }
 
-
-.shadow-bottom {
-    box-shadow: 00px 10px 00px 0px white;
+/**
+ * Crea una sombra personalizada con parámetros específicos
+ * @param {Number} $x - Desplazamiento horizontal
+ * @param {Number} $y - Desplazamiento vertical
+ * @param {Number} $blur - Radio de difuminado
+ * @param {Number} $spread - Radio de expansión
+ * @param {Color} $color - Color de la sombra
+ * @param {Bool} $inset - Si es sombra interior
+ * @return {String} - Valor de box-shadow
+ */
+@function create-shadow($x: 0, $y: 2px, $blur: 4px, $spread: 0, $color: rgba(0, 0, 0, 0.1), $inset: false) {
+  $shadow-value: #{$x} #{$y} #{$blur} #{$spread} #{$color};
+  @if $inset {
+    @return inset #{$shadow-value};
+  }
+  @return $shadow-value;
 }
 
-.shadow-bottom_sm {
-    box-shadow: 00px 2px 10px 0px white;
+/**
+ * Genera una sombra direccional
+ * @param {String} $direction - Dirección de la sombra
+ * @param {Number} $distance - Distancia de la sombra
+ * @param {Number} $blur - Radio de difuminado
+ * @param {Color} $color - Color de la sombra
+ * @return {String} - Valor de box-shadow
+ */
+@function directional-shadow($direction, $distance: 4px, $blur: 8px, $color: rgba(0, 0, 0, 0.15)) {
+  $offsets: map-get($shadow-directions, $direction);
+  @if $offsets {
+    $x: nth($offsets, 1) * $distance;
+    $y: nth($offsets, 2) * $distance;
+    @return create-shadow($x, $y, $blur, 0, $color);
+  }
+  @return create-shadow(0, $distance, $blur, 0, $color);
 }
 
-.shadow-left {
-    box-shadow: -5px 5px 0px 0px white;
+// ===== ADVANCED SHADOW MIXINS =====
+
+/**
+ * Mixin para aplicar sombras de nivel
+ * @param {String} $level - Nivel de sombra
+ * @param {Bool} $important - Añadir !important
+ */
+@mixin shadow($level, $important: false) {
+  $shadow-value: get-shadow($level);
+  @if $important {
+    box-shadow: $shadow-value !important;
+  } @else {
+    box-shadow: $shadow-value;
+  }
 }
 
-.shadow-top {
-    box-shadow: 0px -10px 0px 0px white;
+/**
+ * Mixin para sombras direccionales
+ * @param {String} $direction - Dirección de la sombra
+ * @param {String} $level - Nivel de intensidad
+ * @param {Color} $color - Color personalizado (opcional)
+ */
+@mixin shadow-directional($direction, $level: 'md', $color: null) {
+  $base-blur: 4px;
+  $base-distance: 4px;
+  
+  // Ajustar intensidad según el nivel
+  @if $level == 'xs' {
+    $base-blur: 2px;
+    $base-distance: 2px;
+  } @else if $level == 'sm' {
+    $base-blur: 3px;
+    $base-distance: 3px;
+  } @else if $level == 'lg' {
+    $base-blur: 8px;
+    $base-distance: 6px;
+  } @else if $level == 'xl' {
+    $base-blur: 12px;
+    $base-distance: 8px;
+  }
+  
+  $shadow-color: if($color, $color, rgba(0, 0, 0, 0.15));
+  box-shadow: directional-shadow($direction, $base-distance, $base-blur, $shadow-color);
 }
 
-.shadow-right {
-    box-shadow: 10px 0px 0px 0px white;
+/**
+ * Mixin para sombra de texto
+ * @param {String} $level - Nivel de intensidad
+ * @param {Color} $color - Color de la sombra
+ * @param {String} $direction - Dirección opcional
+ */
+@mixin text-shadow($level: 'md', $color: rgba(0, 0, 0, 0.3), $direction: 'bottom-right') {
+  $offsets: map-get($shadow-directions, $direction);
+  $x: if($offsets, nth($offsets, 1) * 1px, 1px);
+  $y: if($offsets, nth($offsets, 2) * 1px, 1px);
+  
+  @if $level == 'xs' {
+    text-shadow: $x $y 1px $color;
+  } @else if $level == 'sm' {
+    text-shadow: $x $y 2px $color;
+  } @else if $level == 'md' {
+    text-shadow: #{$x * 2} #{$y * 2} 4px $color;
+  } @else if $level == 'lg' {
+    text-shadow: #{$x * 3} #{$y * 3} 6px $color;
+  } @else if $level == 'xl' {
+    text-shadow: #{$x * 4} #{$y * 4} 8px $color;
+  }
 }
 
-.shadow-small {
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.shadow-medium {
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-.shadow-large {
-    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.5);
-}
-
-.shadow-up {
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.shadow-down {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.shadow-left {
-    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.2);
-}
-
-.shadow-right {
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
-}
-
-@mixin shadow-difum_imputs($color) {
-    box-shadow: 0px 3px 1px 0px $color;
-}
-@mixin shadow-difum_txt($color) {
-   text-shadow: 4px 4px 1px 0px $color !important;
-}
-
-@mixin shadow-difum_Forms($color) {
-    box-shadow: 0px 0px 5px 1px $color;
-}
-
-.shadow-difum_Forms {
-    &:hover {
-        transition: .15s all ease-in-out;
-        @include shadow-difum_Forms($color-primario);
+/**
+ * Mixin para sombras múltiples (layered)
+ * @param {List} $shadows - Lista de sombras
+ */
+@mixin shadow-layered($shadows...) {
+  $shadow-list: ();
+  @each $shadow in $shadows {
+    @if type-of($shadow) == 'string' {
+      $shadow-list: append($shadow-list, get-shadow($shadow), comma);
+    } @else {
+      $shadow-list: append($shadow-list, $shadow, comma);
     }
-
+  }
+  box-shadow: $shadow-list;
 }
 
-@mixin shadow-difum_color ($color) {
-    box-shadow: 0px 0px 10px 2px $color;
+/**
+ * Mixin para sombras con transición
+ * @param {String} $level - Nivel de sombra
+ * @param {String} $hover-level - Nivel de sombra al hover
+ * @param {String} $duration - Duración de la transición
+ */
+@mixin shadow-animated($level: 'sm', $hover-level: 'md', $duration: 0.3s) {
+  @include shadow($level);
+  transition: box-shadow $duration ease-in-out;
+  
+  &:hover {
+    @include shadow($hover-level);
+  }
 }
 
-@mixin shadow-BoxBlur {
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-
+/**
+ * Mixin para sombras de formularios
+ * @param {Color} $color - Color de la sombra
+ * @param {String} $style - Estilo (glow, underline, border)
+ */
+@mixin form-shadow($color: $color-primario, $style: 'glow') {
+  @if $style == 'glow' {
+    box-shadow: 0 0 5px 1px rgba($color, 0.3);
+  } @else if $style == 'underline' {
+    box-shadow: 0 2px 0 0 $color;
+  } @else if $style == 'border' {
+    box-shadow: 0 0 0 1px rgba($color, 0.5);
+  }
 }
 
-@mixin Hover_shadow-difum_imput {
-    box-shadow: 0px 2px 0px 0px $color-primarioB;
+/**
+ * Mixin para efectos de elevación material design
+ * @param {Number} $elevation - Nivel de elevación (0-24)
+ */
+@mixin elevation($elevation) {
+  @if $elevation == 0 {
+    box-shadow: none;
+  } @else if $elevation == 1 {
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  } @else if $elevation == 2 {
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  } @else if $elevation == 4 {
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  } @else if $elevation == 8 {
+    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  } @else if $elevation == 16 {
+    box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+  } @else if $elevation == 24 {
+    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+  }
 }
 
-@mixin shadow-bottom_imput {
-    box-shadow: 0px 2px 0px 0px lighten($color: $color-primarioB, $amount: 25);
+// ===== UTILITY CLASSES =====
+
+// Clases de sombra base
+@each $level, $shadow in $shadow-levels {
+  .shadow-#{$level} {
+    @include shadow($level);
+  }
+  
+  .shadow-#{$level}-hover {
+    @include shadow-animated(none, $level);
+  }
 }
 
-@mixin shadow-bottom_imput_color ($color) {
-    box-shadow: 0px 2px 0px 0px lighten($color: $color, $amount: 25);
+// Clases direccionales
+@each $direction, $offsets in $shadow-directions {
+  .shadow-#{$direction} {
+    @include shadow-directional($direction);
+  }
+  
+  .shadow-#{$direction}-sm {
+    @include shadow-directional($direction, 'sm');
+  }
+  
+  .shadow-#{$direction}-lg {
+    @include shadow-directional($direction, 'lg');
+  }
 }
 
-@mixin shadow-linael-bottom_imput_color ($color) {
-    box-shadow: 0px 1px 0px 0px $color;
+// Clases de texto con sombra
+@each $direction, $offsets in $shadow-directions {
+  .text-shadow-#{$direction} {
+    @include text-shadow('md', lighten($FontColorBase, 10%), $direction);
+  }
+  
+  .text-shadow-#{$direction}-light {
+    @include text-shadow('sm', rgba(255, 255, 255, 0.8), $direction);
+  }
+  
+  .text-shadow-#{$direction}-dark {
+    @include text-shadow('md', rgba(0, 0, 0, 0.6), $direction);
+  }
+}
+
+// Clases de elevación Material Design
+@for $i from 0 through 24 {
+  .elevation-#{$i} {
+    @include elevation($i);
+  }
+}
+
+// Clases especiales
+.shadow-none {
+  box-shadow: none !important;
+}
+
+.shadow-inset {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-outline {
+  box-shadow: 0 0 0 3px rgba($color-primario, 0.3);
+}
+
+// ===== COMPONENT-SPECIFIC SHADOWS =====
+
+// Sombras para formularios
+.form-shadow {
+  @include form-shadow($color-primario, 'glow');
+  
+  &:focus {
+    @include form-shadow($color-primario, 'glow');
+    box-shadow: 0 0 8px 2px rgba($color-primario, 0.4);
+  }
+}
+
+.form-shadow-underline {
+  @include form-shadow($color-primario, 'underline');
+  transition: box-shadow 0.2s ease;
+  
+  &:focus {
+    box-shadow: 0 3px 0 0 $color-secundario;
+  }
+}
+
+// Sombras para botones
+.btn-shadow {
+  @include shadow-animated('sm', 'md');
+  
+  &:active {
+    @include shadow('xs');
+    transform: translateY(1px);
+  }
+}
+
+// Sombras para tarjetas
+.card-shadow {
+  @include shadow-animated('md', 'lg', 0.2s);
+}
+
+// Sombras coloridas
+.shadow-primary {
+  box-shadow: 0 4px 14px 0 rgba($color-primario, 0.39);
+}
+
+.shadow-secondary {
+  box-shadow: 0 4px 14px 0 rgba($color-secundario, 0.39);
+}
+
+// ===== RESPONSIVE SHADOWS =====
+
+// Reducir sombras en dispositivos móviles para mejor rendimiento
+@media (max-width: 768px) {
+  .shadow-lg,
+  .shadow-xl,
+  .shadow-2xl {
+    @include shadow('md');
+  }
+  
+  .elevation-16,
+  .elevation-24 {
+    @include elevation(8);
+  }
+}
+
+// ===== ACCESSIBILITY =====
+
+// Reducir sombras para usuarios que prefieren menos movimiento
+@media (prefers-reduced-motion: reduce) {
+  .shadow-animated,
+  .btn-shadow,
+  .card-shadow {
+    transition: none;
+  }
+}
+
+// Alto contraste
+@media (prefers-contrast: high) {
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg {
+    box-shadow: 0 0 0 1px currentColor;
+  }
 }

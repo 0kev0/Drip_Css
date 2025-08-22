@@ -1,35 +1,116 @@
-/*Paleta de colores A*/
+// =============================================================================
+// DESIGN SYSTEM - VARIABLES SCSS
+// =============================================================================
+
+// =============================================================================
+// PALETAS DE COLORES
+// =============================================================================
+
+// Paleta A - Principal (Púrpura/Violeta)
+$color-palette-a: (
+  'bg-primary': rgb(52, 52, 52),
+  'bg-secondary': rgb(62, 6, 95),
+  'primary': rgb(142, 5, 194),
+  'secondary': rgb(112, 11, 151)
+);
+
 $colorbg-primario: rgb(52, 52, 52);
-$colorBg-secundario :rgb(62, 6, 95);
-$color-primario : rgb(142, 5, 194);
-$color-secundario : rgb(112, 11, 151);
+$colorBg-secundario: rgb(62, 6, 95);
+$color-primario: rgb(142, 5, 194);
+$color-secundario: rgb(112, 11, 151);
 
-$Tema1: ("bg-primario": rgb(52, 52, 52), "Bg-secundario": rgb(62, 6, 95), "primario": rgb(142, 5, 194), "secundario": rgb(112, 11, 151));
+// Paleta B - Rojo/Negro
+$color-palette-b: (
+  'bg-primary': rgb(0, 0, 0),
+  'bg-secondary': rgb(61, 0, 0),
+  'primary': rgb(255, 0, 0),
+  'secondary': rgb(149, 1, 1)
+);
 
-/*Paleta de colores B*/
 $colorbg-primarioB: rgb(0, 0, 0);
-$colorBg-secundarioB :rgb(61, 0, 0);
-$color-primarioB : rgb(255, 0, 0);
-$color-secundarioB : rgb(149, 1, 1);
+$colorBg-secundarioB: rgb(61, 0, 0);
+$color-primarioB: rgb(255, 0, 0);
+$color-secundarioB: rgb(149, 1, 1);
 
-/*Paleta de colores C*/
+// Paleta C - Azul/Púrpura claro
+$color-palette-c: (
+  'bg-primary': rgb(7, 15, 43),
+  'bg-secondary': rgb(27, 26, 85),
+  'primary': rgb(146, 144, 195),
+  'secondary': rgb(83, 92, 145)
+);
+
 $colorbg-primarioC: rgb(7, 15, 43);
-$colorBg-secundarioC :rgb(27, 26, 85);
-$color-primarioC : rgb(146, 144, 195);
-$color-secundarioC : rgb(83, 92, 145);
+$colorBg-secundarioC: rgb(27, 26, 85);
+$color-primarioC: rgb(146, 144, 195);
+$color-secundarioC: rgb(83, 92, 145);
 
-/*Paleta de colores D*/
+// Paleta D - Azul oscuro/Púrpura
+$color-palette-d: (
+  'bg-primary': rgb(3, 6, 55),
+  'bg-secondary': rgb(60, 7, 83),
+  'primary': rgb(114, 4, 85),
+  'secondary': #910a67
+);
+
 $colorbg-primarioD: rgb(3, 6, 55);
-$colorBg-secundarioD :rgb(60, 7, 83);
-$color-primarioD : rgb(114, 4, 85);
-$color-secundarioD : #910a67;
+$colorBg-secundarioD: rgb(60, 7, 83);
+$color-primarioD: rgb(114, 4, 85);
+$color-secundarioD: #910a67;
 
-/*Colores para texto */
+// =============================================================================
+// COLORES DEL SISTEMA
+// =============================================================================
+
+// Colores de texto
+$font-colors: (
+  'base': rgb(255, 255, 255),
+  'dark': rgb(33, 37, 41),
+  'light': rgb(248, 249, 250),
+  'muted': rgb(108, 117, 125)
+);
+
 $FontColorBase: rgb(255, 255, 255);
-$colorForm-primario: rgb(61, 3, 3);
-$colorForm-secundario :rgb(97, 0, 154);
+$text-dark: rgb(33, 37, 41);
+$text-light: rgb(248, 249, 250);
+$text-muted: rgb(108, 117, 125);
 
-// Definición de colores como variables
+// Colores de formularios
+$form-colors: (
+  'primary': rgb(61, 3, 3),
+  'secondary': rgb(97, 0, 154),
+  'background': radial-gradient(at left top, #373737, #4f4f4f, #5a5a5a, #636363, #929292)
+);
+
+$colorForm-primario: rgb(61, 3, 3);
+$colorForm-secundario: rgb(97, 0, 154);
+$GrayRdBg: radial-gradient(at left top, #373737, #4f4f4f, #5a5a5a, #636363, #929292);
+
+// Colores de alertas
+$alert-colors: (
+  'success': (
+    'bg': #d4edda,
+    'border': #c3e6cb,
+    'text': #155724
+  ),
+  'error': (
+    'bg': #f8d7da,
+    'border': #f5c6cb,
+    'text': #721c24
+  ),
+  'warning': (
+    'bg': #fff3cd,
+    'border': #ffeeba,
+    'text': #856404
+  ),
+  'info': (
+    'bg': #d1ecf1,
+    'border': #bee5eb,
+    'text': #0c5460
+  )
+);
+
+// Variables individuales para compatibilidad
 $alert-success-bg: #d4edda;
 $alert-success-border: #c3e6cb;
 $alert-success-text: #155724;
@@ -46,52 +127,290 @@ $alert-info-bg: #d1ecf1;
 $alert-info-border: #bee5eb;
 $alert-info-text: #0c5460;
 
-/*tamanos de fuentes*/
-$FontSize : ("Xpequeno": 16px, "pequeno": 18px, "mediano": 20px, "grande": 30px, "Xgrande": 50px);
+// Colores adicionales del sistema
+$system-colors: (
+  'bg-light': #f8f9fa,
+  'bg-dark': #212529,
+  'border-default': #dee2e6,
+  'border-light': #f8f9fa,
+  'border-dark': #495057
+);
 
-/*Heigths*/
-$inputHeigtSizes : ("Xpequeno": 4vh, "pequeno": 4vh, "mediano": 5vh, "grande": 6vh, "Xgrande": 7vh);
+$bg-light: #f8f9fa;
+$bg-dark: #212529;
+$border-color-default: #dee2e6;
 
-/*Width*/
-$inputWithSizes : ("Xpequeno": 10%, "pequeno": 15%, "mediano": 20%, "grande": 50%, "Xgrande": 90%);
+// Bootstrap compatibility
+$bs-body-bg-rgb: 33, 37, 41;
+$bs-primary-rgb: 110, 168, 254;
+$bd-accent-rgb: 0, 123, 255;
+$bd-violet-rgb: 88, 86, 214;
+$bd-pink-rgb: 255, 55, 95;
 
-/*tamanos de margin*/
-$MarginSizes : ("Xpequeno": 2%, "pequeno": 3%, "mediano": 5%, "grande": 7%, "Xgrande": 8%);
+// =============================================================================
+// TIPOGRAFÍA
+// =============================================================================
 
-/*tamanos de paddings*/
-$PaddingSizes : ("Xpequeno": 2%, "pequeno": 5%, "mediano": 8%, "grande": 10%, "Xgrande": 15%);
+// Tamaños de fuente
+$font-sizes: (
+  'xs': 14px,
+  'sm': 16px,
+  'base': 18px,
+  'lg': 20px,
+  'xl': 24px,
+  '2xl': 30px,
+  '3xl': 36px,
+  '4xl': 48px,
+  '5xl': 60px
+);
 
-/*tamanos de Buttons*/
-$BtHeight : ("pequeno": 6vh, "mediano": 8vh, "grande": 10vh, "Xgrande": 12vh);
-$BtWidth : ("pequeno": 10vh, "mediano": 12vh, "grande": 14vh, "Xgrande": 18vh);
+// Compatibilidad con nombres antiguos
+$FontSize: (
+  'Xpequeno': 16px,
+  'pequeno': 18px,
+  'mediano': 20px,
+  'grande': 30px,
+  'Xgrande': 50px
+);
 
-$borders : ("Xpequeno":1px, "pequeno": 2px, "mediano": 5px, "grande": 8px, "Xgrande": 12px);
-$RangeSizes : ("pequeno": 15%, "mediano": 25%, "grande": 50%, "Xgrande": 60%);
-$AlertsSizes : ("pequeno": 15%, "mediano": 25%, "grande": 50%, "Xgrande": 60%);
+// Pesos de fuente
+$font-weights: (
+  'light': 300,
+  'normal': 400,
+  'medium': 500,
+  'semibold': 600,
+  'bold': 700,
+  'extrabold': 800
+);
 
-//tamanos universales
+// Alturas de línea
+$line-heights: (
+  'tight': 1.25,
+  'snug': 1.375,
+  'normal': 1.5,
+  'relaxed': 1.625,
+  'loose': 2
+);
+
+// =============================================================================
+// ESPACIADO
+// =============================================================================
+
+// Sistema de espaciado base (multiplos de 4px)
+$spacing: (
+  '0': 0,
+  '1': 0.25rem,  // 4px
+  '2': 0.5rem,   // 8px
+  '3': 0.75rem,  // 12px
+  '4': 1rem,     // 16px
+  '5': 1.25rem,  // 20px
+  '6': 1.5rem,   // 24px
+  '8': 2rem,     // 32px
+  '10': 2.5rem,  // 40px
+  '12': 3rem,    // 48px
+  '16': 4rem,    // 64px
+  '20': 5rem,    // 80px
+  '24': 6rem,    // 96px
+  '32': 8rem     // 128px
+);
+
+// Márgenes (compatibilidad)
+$MarginSizes: (
+  'Xpequeno': 2%,
+  'pequeno': 3%,
+  'mediano': 5%,
+  'grande': 7%,
+  'Xgrande': 8%
+);
+
+// Paddings (compatibilidad)
+$PaddingSizes: (
+  'Xpequeno': 2%,
+  'pequeno': 5%,
+  'mediano': 8%,
+  'grande': 10%,
+  'Xgrande': 15%
+);
+
+// Tamaños universales
 $small: 10px;
-$meduium: 15px;
+$meduium: 15px; // Mantener typo para compatibilidad
+$medium: 15px;  // Versión corregida
 $large: 20px;
 
-/*Border radius*/
-$estandar : 12px;
+// =============================================================================
+// DIMENSIONES
+// =============================================================================
 
-/*forms bg*/
-$GrayRdBg: radial-gradient(at left top, #373737, #4f4f4f, #5a5a5a, #636363, #929292);
+// Alturas de inputs
+$input-heights: (
+  'xs': 2rem,     // 32px
+  'sm': 2.5rem,   // 40px
+  'base': 3rem,   // 48px
+  'lg': 3.5rem,   // 56px
+  'xl': 4rem      // 64px
+);
 
-$bs-body-bg-rgb: 33,
-37,
-41; // Definir variable para el color de fondo del cuerpo
-$bs-primary-rgb: 110,
-168,
-254; // Definir variable para el color primario
-$bd-accent-rgb: 0,
-123,
-255; // Definir variable para el color de acento
-$bd-violet-rgb: 88,
-86,
-214; // Definir variable para el color violeta
-$bd-pink-rgb: 255,
-55,
-95;
+$inputHeigtSizes: (
+  'Xpequeno': 4vh,
+  'pequeno': 4vh,
+  'mediano': 5vh,
+  'grande': 6vh,
+  'Xgrande': 7vh
+);
+
+// Anchos de inputs
+$input-widths: (
+  'xs': 8rem,     // 128px
+  'sm': 12rem,    // 192px
+  'base': 16rem,  // 256px
+  'lg': 20rem,    // 320px
+  'xl': 24rem,    // 384px
+  'full': 100%
+);
+
+$inputWithSizes: (
+  'Xpequeno': 10%,
+  'pequeno': 15%,
+  'mediano': 20%,
+  'grande': 50%,
+  'Xgrande': 90%
+);
+
+// Tamaños de botones
+$button-sizes: (
+  'sm': (
+    'height': 2rem,
+    'width': 4rem,
+    'padding': 0.25rem 0.75rem,
+    'font-size': 0.875rem
+  ),
+  'base': (
+    'height': 2.5rem,
+    'width': 6rem,
+    'padding': 0.5rem 1rem,
+    'font-size': 1rem
+  ),
+  'lg': (
+    'height': 3rem,
+    'width': 8rem,
+    'padding': 0.75rem 1.5rem,
+    'font-size': 1.125rem
+  ),
+  'xl': (
+    'height': 3.5rem,
+    'width': 10rem,
+    'padding': 1rem 2rem,
+    'font-size': 1.25rem
+  )
+);
+
+$BtHeight: (
+  'pequeno': 6vh,
+  'mediano': 8vh,
+  'grande': 10vh,
+  'Xgrande': 12vh
+);
+
+$BtWidth: (
+  'pequeno': 10vh,
+  'mediano': 12vh,
+  'grande': 14vh,
+  'Xgrande': 18vh
+);
+
+// =============================================================================
+// BORDES Y RADIOS
+// =============================================================================
+
+// Grosores de borde
+$border-widths: (
+  '0': 0,
+  '1': 1px,
+  '2': 2px,
+  '4': 4px,
+  '8': 8px
+);
+
+$borders: (
+  'Xpequeno': 1px,
+  'pequeno': 2px,
+  'mediano': 5px,
+  'grande': 8px,
+  'Xgrande': 12px
+);
+
+// Radios de borde
+$border-radius: (
+  'none': 0,
+  'sm': 0.125rem,   // 2px
+  'base': 0.25rem,  // 4px
+  'md': 0.375rem,   // 6px
+  'lg': 0.5rem,     // 8px
+  'xl': 0.75rem,    // 12px
+  '2xl': 1rem,      // 16px
+  '3xl': 1.5rem,    // 24px
+  'full': 9999px
+);
+
+$estandar: 12px;
+
+// =============================================================================
+// BREAKPOINTS RESPONSIVE
+// =============================================================================
+
+$breakpoints: (
+  'xs': 0,
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px
+);
+
+// =============================================================================
+// SOMBRAS
+// =============================================================================
+
+$shadows: (
+  'none': none,
+  'xs': 0 1px 2px 0 rgb(0 0 0 / 0.05),
+  'sm': 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1),
+  'base': 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1),
+  'md': 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1),
+  'lg': 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1),
+  'xl': 0 25px 50px -12px rgb(0 0 0 / 0.25),
+  'inner': inset 0 2px 4px 0 rgb(0 0 0 / 0.05)
+);
+
+// =============================================================================
+// TRANSICIONES
+// =============================================================================
+
+$transitions: (
+  'none': none,
+  'all': all 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'default': all 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'colors': color, background-color, border-color, text-decoration-color, fill, stroke 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'opacity': opacity 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'shadow': box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'transform': transform 150ms cubic-bezier(0.4, 0, 0.2, 1)
+);
+
+// =============================================================================
+// RANGOS Y ALERTAS (Compatibilidad)
+// =============================================================================
+
+$RangeSizes: (
+  'pequeno': 15%,
+  'mediano': 25%,
+  'grande': 50%,
+  'Xgrande': 60%
+);
+
+$AlertsSizes: (
+  'pequeno': 15%,
+  'mediano': 25%,
+  'grande': 50%,
+  'Xgrande': 60%
+);

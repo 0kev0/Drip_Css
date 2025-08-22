@@ -1,30 +1,44 @@
-$color-primario : rgb(142, 5, 194);
-$color-secundario : rgb(112, 11, 151);
+// ===== VARIABLES =====
+$color-primario: rgb(142, 5, 194);
+$color-secundario: rgb(112, 11, 151);
+
 @import 'FontsStyles';
 @import 'Shadow';
 
+// ===== MIXINS =====
 @mixin center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+@mixin transition($property: all, $duration: 0.3s, $timing: ease-in-out) {
+  transition: $property $duration $timing;
+}
 
+@mixin hover-lift {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+// ===== BASE NAVIGATION =====
 .nav {
   @include center;
   background-color: $color-primario;
   font-family: 'Times New Roman', Times, serif;
   font-size: 20px;
-  overflow: hidden;
+  position: relative;
+  z-index: 100;
 
   ul {
-    list-style-type: none;
+    list-style: none;
     margin: 0;
     padding: 0;
+    display: flex;
   }
 
-  ul li {
-    float: left;
+  li {
+    position: relative;
 
     a {
       display: block;
@@ -32,90 +46,320 @@ $color-secundario : rgb(112, 11, 151);
       text-align: center;
       padding: 14px 20px;
       text-decoration: none;
+      @include transition();
 
       &:hover {
         background-color: $color-secundario;
         color: black;
+        @include hover-lift;
+      }
+
+      &:focus {
+        outline: 2px solid rgba(white, 0.5);
+        outline-offset: 2px;
       }
     }
   }
 }
 
-//FALTA AGREGAR EXPLICACION DE USO Y SUGERENCIAS PARA ESTILOS 
-//Preferiblemente combinar los primeros 2 colores, el tercer color debe hacer contraste con los anteriores
-//PARA EL NAVBAR 2 PUEDE USAR EL MISMO COLOR EN LOS PRIEROS 2 PARAMETROS
-//J=PUEDE ADAPTAR EL JUSTIFICADO A SU PREFERENCIA
-//PREFERIBLEMENTE USAR FUENTES TITULO O TEMA
-@mixin AplicarTemasNavbar($colorBG, $colorBGItems, $ColorHover_A, $SetSombrasLogo, $SetSombrasLetra, $FontPackLogo, $FontLogo, $FontPack_A, $Font_A, $Justify, $key) {
+// ===== ADVANCED NAVBAR THEME MIXIN =====
+/**
+ * Mixin para crear temas de navbar personalizados
+ * 
+ * @param {Color} $colorBG - Color de fondo principal del navbar
+ * @param {Color} $colorBGItems - Color de fondo de los elementos del header
+ * @param {Color} $colorHover - Color al hacer hover sobre los enlaces
+ * @param {Color} $shadowLogo - Color de sombra del logo
+ * @param {Color} $shadowLetter - Color de sombra de la primera letra
+ * @param {Map} $fontPackLogo - Paquete de fuentes para el logo
+ * @param {String} $fontLogo - Fuente específica del logo
+ * @param {Map} $fontPackLinks - Paquete de fuentes para los enlaces
+ * @param {String} $fontLinks - Fuente específica de los enlaces
+ * @param {String} $justify - Justificación del contenido
+ * @param {String} $sizeKey - Clave para el tamaño de fuente
+ */
+@mixin navbar-theme(
+  $colorBG,
+  $colorBGItems,
+  $colorHover,
+  $shadowLogo,
+  $shadowLetter,
+  $fontPackLogo,
+  $fontLogo,
+  $fontPackLinks,
+  $fontLinks,
+  $justify,
+  $sizeKey
+) {
+  background-color: $colorBG;
+  justify-content: $justify;
+  font-family: map-get($FontPack3, Titulo);
+  font-size: map-get($FontSize, $sizeKey);
+
   .header {
-    background-color: $colorBGItems !important;
-    justify-content: $Justify !important;
-    width: auto;
+    background-color: $colorBGItems;
+    justify-content: $justify;
+    width: 100%;
     color: #eceff1;
     padding: 10px 20px;
-  }
-
-  ul li {
-    display: inline-block;
-    position: relative;
+    display: flex;
+    align-items: center;
+    @include transition();
   }
 
   ul {
-    background: $colorBG !important;
-  }
+    background: $colorBG;
+    display: flex;
+    gap: 0;
 
-  justify-content: $Justify;
-  font-family: map-get($map: $FontPack3 , $key:Titulo ) !important;
-  font-size: map-get($map: $FontSize , $key: $key )!important;
-  background-color: $colorBG !important;
+    li {
+      display: inline-block;
+      position: relative;
 
-  ul li a {
-    font-family: map-get($map: $FontPack_A , $key:$Font_A )!important;
+      a {
+        font-family: map-get($fontPackLinks, $fontLinks);
+        @include transition();
 
-    &:hover {
-      transition: .20s all ease-in; 
-      font-weight: 500;
-      background-color: $ColorHover_A !important;
+        &:hover {
+          font-weight: 500;
+          background-color: $colorHover;
+          @include hover-lift;
+        }
+
+        &:active {
+          transform: translateY(0);
+          transition-duration: 0.1s;
+        }
+      }
+
+      // Dropdown menu
+      ul.drip {
+        width: 100%;
+        background: $colorBG;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 999;
+        display: none;
+        opacity: 0;
+        transform: translateY(-10px);
+        @include transition(all, 0.25s);
+
+        li {
+          width: 100%;
+          
+          a {
+            white-space: nowrap;
+            padding: 12px 16px;
+          }
+        }
+      }
+
+      &:hover ul.drip {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-  }
-
-  ul li ul.drip {
-    width: 100%;
-    background: $colorBG !important;
-    position: absolute;
-    z-index: 999;
-    display: none;
   }
 
   .logo {
     @extend .titulo;
-    font-family: map-get($map: $FontPackLogo , $key: $FontLogo ) !important;
+    font-family: map-get($fontPackLogo, $fontLogo);
     font-size: 32px;
     color: white;
-    text-shadow: 3px 4px 1px $SetSombrasLogo !important;
+    text-shadow: 3px 4px 1px $shadowLogo;
     text-decoration: none;
     margin-left: 15px;
+    @include transition();
 
+    &:hover {
+      transform: scale(1.05);
+    }
 
     &::first-letter {
-      color: white !important;
+      color: white;
       margin-right: 10px;
-      text-shadow: 4px 4px 2px lighten($color: $SetSombrasLetra, $amount: 15) !important;
+      text-shadow: 4px 4px 2px lighten($shadowLetter, 15%);
       font-size: 40px;
     }
   }
 }
 
-.Drip_logo_TemaC {
+// ===== SPECIFIC NAVBAR THEMES =====
+
+// Modern navbar with enhanced styling
+.nav2 {
+  @extend .nav;
+  @include center;
+  @include navbar-theme(
+    $color-secundarioB,
+    $color-primarioB,
+    lighten($color-secundarioB, 20%),
+    $color-primarioB,
+    $color-primarioB,
+    $FontPack2,
+    Texto,
+    $FontPack2,
+    Texto,
+    space-between,
+    grande
+  );
+
+  ul li a {
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+  }
+}
+
+// Alternative navbar theme
+.nav2-alt {
+  @extend .nav;
+  @include center;
+  @include navbar-theme(
+    $color-secundario,
+    $color-primario,
+    lighten($color-secundario, 20%),
+    $color-primario,
+    $color-primario,
+    $FontPack3,
+    Texto,
+    $FontPack2,
+    Texto,
+    space-between,
+    grande
+  );
+
+  ul li a {
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+  }
+}
+
+// Premium navbar with advanced features
+.nav3 {
+  @include navbar-theme(
+    $color-secundarioC,
+    $color-secundarioC,
+    $color-secundarioC,
+    $color-primarioC,
+    $color-primarioC,
+    $FontPack2,
+    Tema,
+    $FontPack2,
+    Titulo,
+    flex-end,
+    grande
+  );
+
+  .header {
+    height: 85px;
+    padding: 5px 3%;
+
+    .logo {
+      order: 3;
+      margin-left: 15px;
+    }
+
+    .nav-links {
+      li {
+        padding: 0 20px;
+        @include transition();
+
+        &:hover {
+          transform: scale(1.1);
+        }
+
+        a:hover {
+          color: #ffbc0e;
+        }
+      }
+    }
+
+    .btn {
+      order: 2;
+
+      button {
+        margin-left: 20px;
+        font-weight: 700;
+        color: #1b3039;
+        padding: 9px 25px;
+        background: #eceff1;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        @include transition();
+
+        &:hover {
+          color: #ffbc0e;
+          transform: scale(1.1);
+          @include hover-lift;
+        }
+
+        &:focus {
+          outline: 2px solid #ffbc0e;
+          outline-offset: 2px;
+        }
+      }
+    }
+  }
+}
+
+// Minimal navbar design
+.nav4 {
+  @include navbar-theme(
+    $color-secundarioD,
+    $colorbg-primarioD,
+    lighten($color-secundarioD, 20%),
+    $color-primarioD,
+    $color-secundarioD,
+    $FontPack2,
+    Tema,
+    $FontPack3,
+    Texto,
+    center,
+    grande
+  );
+
+  background-color: $color-secundario;
+
+  .header .logo {
+    order: 3;
+  }
+
+  ul li {
+    a {
+      display: block;
+      padding: 15px 20px;
+      font-size: 18px;
+    }
+
+    &:hover ul.drip {
+      display: block;
+    }
+  }
+}
+
+// ===== LOGO COMPONENTS =====
+.logo-theme-c {
   @extend .titulo;
 
   h1 {
-    font-family: map-get($map: $FontPack1, $key: Tema);
+    font-family: map-get($FontPack1, Tema);
     font-size: 32px;
     color: white;
     text-shadow: 3px 4px $color-primarioC;
     text-decoration: none;
     margin-left: 15px;
+    @include transition();
+
+    &:hover {
+      transform: scale(1.02);
+    }
 
     &::first-letter {
       color: $color-primarioC;
@@ -123,268 +367,103 @@ $color-secundario : rgb(112, 11, 151);
       text-shadow: 3px 4px black;
       font-size: 40px;
     }
-
-    @media screen and (max-width: 1000px) {
-      font-size: 24px; 
-      margin: 0;
-    }
-  }
-
-}
-
-.nav2 {
-  @extend .nav;
-  @include center;
-  //VARIABLES @mixin AplicarTemasNavbar($colorBG,$colorBGItems, $ColorHover_A, $SetSombrasLogo,$SetSombrasLetra, $FontPackLogo, $FontLogo, $FontPack_A, $Font_A, $Justify, $key) 
-  @include AplicarTemasNavbar($color-secundarioB, $color-primarioB, lighten($color: $color-secundarioB, $amount: 20), $color-primarioB, $color-primarioB, $FontPack2, Texto, $FontPack2, Texto, space-between, grande);
-
-  //ESTILOS DISTINTIVOS
-  ul li a {
-    &:hover {
-      transition: .20s all ease-in;
-      text-decoration: underline;
-    }
   }
 }
 
-.nav2_Ver2 {
-  @extend .nav;
-  @include center;
-  //VARIABLES @mixin AplicarTemasNavbar($colorBG,$colorBGItems, $ColorHover_A, $SetSombrasLogo,$SetSombrasLetra, $FontPackLogo, $FontLogo, $FontPack_A, $Font_A, $Justify, $key) 
-  @include AplicarTemasNavbar($color-secundario, $color-primario, lighten($color: $color-secundario, $amount: 20), $color-primario, $color-primario, $FontPack3, Texto, $FontPack2, Texto, space-between, grande);
-
-  //ESTILOS DISTINTIVOS
-  ul li a {
-    &:hover {
-      transition: .20s all ease-in;
-      text-decoration: underline;
-    }
-  }
-}
-
-.nav3 {
-  //VARIABLES @mixin AplicarTemasNavbar($colorBG,$colorBGItems, $ColorHover_A, $SetSombrasLogo,$SetSombrasLetra, $FontPackLogo, $FontLogo, $FontPack_A, $Font_A, $Justify, $key) 
-  @include AplicarTemasNavbar($color-secundarioC, $color-secundarioC, $color-secundarioC, $color-primarioC, $color-primarioC, $FontPack2, Tema, $FontPack2, Titulo, flex-end, grande);
-  font-size: small;
-  .header {
-    height: 85px;
-    padding: 5px 3%;
-
-  }
-
-  .header .logo {
-    order: 3;
-    margin-left: 15px;
-  }
-
-  .header .nav-links li {
-    padding: 0 20px;
-  }
-
-  .header .nav-links li:hover {
-    transition: .20S all ease-in;
-    transform: scale(1.1);
-  }
-
-  .header .nav-links li a:hover {
-    color: #ffbc0e;
-  }
-
-  .header .btn {
-    order: 2;
-  }
-
-  .header .btn button {
-    margin-left: 20px;
-    font-weight: 700;
-    color: #1b3039;
-    padding: 9px 25px;
-    background: #eceff1;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
-  }
-
-  .header .btn button:hover {
-    color: #ffbc0e;
-    transform: scale(1.1);
-  }
-  
-  
-  @media only screen and (max-width: 1024px) {
+// ===== RESPONSIVE DESIGN =====
+@media screen and (max-width: 1024px) {
+  .nav3 {
     .header {
       height: 85px;
-      padding: 3px 3px;
-    }
-  
-    .header .logo {
-      order: 3;
-      padding: 3px 3px;
-      margin: 0;
-      font-size: map-get($map:$FontSize, $key: pequeno);
-    }
-  
-    .header .nav-links li {
-      padding: 0 3px;
-    }
-  
-    .header .nav-links li:hover {
-      transition: .20s all ease-in;
-      transform: scale(1.1);
-    }
-  
-    .header .nav-links li a:hover {
-      color: #ffbc0e;
-    }
-  
-    .header .btn {
-      order: 2;
-    }
-  
-    .header .btn button {
-      font-weight: 700;
-      margin: 0;
-      color: #1b3039;
-      padding: 1px;
-      background: #eceff1;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease 0s;
-      display: flex;
-      justify-content: center;
-    }
-  
-    .header .btn button:hover {
-      color: #ffbc0e;
-      transform: scale(1.1);
+      padding: 3px;
+
+      .logo {
+        font-size: map-get($FontSize, pequeno);
+        margin: 0;
+        padding: 3px;
+      }
+
+      .nav-links li {
+        padding: 0 3px;
+      }
+
+      .btn button {
+        margin: 0;
+        padding: 6px 12px;
+        font-size: 14px;
+      }
     }
   }
-  
+}
 
-  @media only screen and (max-width: 768px) {
-    .Drip_logo_TemaC {
-      @extend .titulo;
-    
-      h1 {
-        font-size: 15px;
-        color: white;
-        text-shadow: 3px 4px $color-primarioC;
-        text-decoration: none;
-        margin-left: 2px;
-    
-        &::first-letter {
-          margin-right: 3px;
-          text-shadow: 3px 4px black;
-          font-size: 40px;
-        }
-    
-        @media screen and (max-width: 1000px) {
-          font-size: 20px; 
-          margin: 0;
-        }
-      }
-    
-    }
-   
-    .logo {
-      @extend .titulo;
-      font-size: 20px;
-      color: white;
-      text-decoration: none;
-      margin-left: 5px;
-  
-  
-      &::first-letter {
-        color: white !important;
-        margin-right: 2px;
-        font-size: 25px;
-      }
-    }
-
+@media screen and (max-width: 768px) {
+  .nav3 {
     .header {
-      height: 85px;
+      height: 70px;
       padding: 5px 3px;
-    }
-  
-    .header .logo {
-      order: 3;
-      padding: 5px 53px;
-      margin: 0;
-      font-size: 12px;
-    }
-  
-    .header .nav-links li {
-      padding: 0 3px;
-    }
-  
-    .header .nav-links li:hover {
-      transition: .20s all ease-in;
-      transform: scale(1.1);
-    }
-  
-    .header .nav-links li a:hover {
-      color: #ffbc0e;
-    }
-  
-    .header .btn {
-      order: 2;
-    }
-  
-    .header .btn button {
-      font-weight: 600;
-      margin: 0;
-      color: #1b3039;
-      padding: 2px 1px;
-      background: #eceff1;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease 0s;
-      display: flex;
-      justify-content: center;
-    }
-  
-    .header .btn button:hover {
-      color: #ffbc0e;
-      transform: scale(1.1);
+
+      .logo {
+        font-size: 20px;
+        margin-left: 5px;
+        padding: 5px 20px;
+
+        &::first-letter {
+          margin-right: 2px;
+          font-size: 25px;
+        }
+      }
+
+      .nav-links li {
+        padding: 0 2px;
+      }
+
+      .btn button {
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: 600;
+      }
     }
   }
-  
+
+  .logo-theme-c h1 {
+    font-size: 20px;
+    margin-left: 2px;
+
+    &::first-letter {
+      margin-right: 3px;
+      font-size: 30px;
+    }
+  }
+
+  .nav4 ul {
+    display: none;
+  }
 }
 
-
-
-
-.nav4 {
-  //VARIABLES @mixin AplicarTemasNavbar($colorBG,$colorBGItems, $ColorHover_A, $SetSombrasLogo,$SetSombrasLetra, $FontPackLogo, $FontLogo, $FontPack_A, $Font_A, $Justify, $key) 
-  @include AplicarTemasNavbar($color-secundarioD, $colorbg-primarioD, lighten($color: $color-secundarioD, $amount: 20), $color-primarioD, $color-secundarioD, $FontPack2, Tema, $FontPack3, Texto, center, grande);
-
-  .header .logo {
-    order: 3;
+// ===== ACCESSIBILITY ENHANCEMENTS =====
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    transform: none !important;
   }
+}
 
-  background-color: rgb(112, 11, 151); // No necesitas dos puntos aquí
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .nav,
+  .nav2,
+  .nav2-alt,
+  .nav3,
+  .nav4 {
+    border: 2px solid currentColor;
 
-  ul li a {
-    display: block;
-    padding: 15px 20px;
-    font-size: 18px;
-  }
+    a {
+      border: 1px solid transparent;
 
-  ul li:hover ul.drip {
-    display: block;
-  }
-
-  // Reglas de medios para pantallas pequeas
-  @media screen and (max-width: 800px) {
-    .nav4 ul {
-      display: none; // Oculta el menú principal en pantallas pequeñas
-    }
-
-    #ubicaciones:hover {
-      display: none; // Oculta el menú desplegable de ubicaciones al pasar el ratón sobre él en pantallas pequeñas
+      &:hover,
+      &:focus {
+        border-color: currentColor;
+      }
     }
   }
 }
