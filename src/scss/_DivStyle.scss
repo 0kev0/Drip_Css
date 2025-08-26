@@ -1,0 +1,344 @@
+@use 'Variables' as vars;
+@use 'sass:map';
+@use 'sass:color';
+
+// =============================================================================
+// NAVBAR COMPONENT - FULLY MODERNIZED
+// =============================================================================
+
+// Navbar base styles
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: vars.$colorbg-primario;
+  border-bottom: 1px solid vars.$color-secundario;
+  
+  // Modernized font family check and application
+  @if map.has-key(vars.$FontPack1, 'Titulo') {
+    font-family: map.get(vars.$FontPack1, 'Titulo');
+  } @else {
+    font-family: map.get(vars.$font-pack-classic, 'title'), vars.$font-stack-sans;
+  }
+}
+
+// Navbar title/logo
+.navbar__title {
+  color: vars.$color-primario;
+  font-weight: map.get(vars.$font-weights, 'bold');
+  font-size: map.get(vars.$font-sizes, 'xl');
+  text-decoration: none;
+  
+  &:hover {
+    color: vars.$color-secundario;
+    transition: color 0.3s ease;
+  }
+}
+
+// Navbar navigation links container
+.navbar__nav {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+// Individual navigation items
+.navbar__nav-item {
+  display: flex;
+  align-items: center;
+}
+
+// Navigation links styling
+.navbar__nav-link {
+  color: vars.$FontColorBase;
+  text-decoration: none;
+  font-size: map.get(vars.$font-sizes, 'base');
+  font-weight: map.get(vars.$font-weights, 'medium');
+  padding: 0.5rem 1rem;
+  border-radius: map.get(vars.$border-radius, 'md');
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(vars.$color-secundario, 0.1);
+    color: vars.$color-secundario;
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  // Active link state
+  &--active {
+    background: vars.$color-secundario;
+    color: white;
+    
+    &:hover {
+      background: vars.$color-primario;
+    }
+  }
+}
+
+// =============================================================================
+// NAVBAR MIXINS FOR FONT AND SIZE HANDLING - FULLY MODERNIZED
+// =============================================================================
+
+// Modernized mixin for navbar font application
+@mixin apply-navbar-font($fontPack: vars.$FontPack1, $fontKey: 'Titulo') {
+  @if map.has-key($fontPack, $fontKey) {
+    font-family: map.get($fontPack, $fontKey);
+  } @else {
+    font-family: map.get(vars.$font-pack-classic, 'title'), vars.$font-stack-sans;
+  }
+}
+
+// Modernized mixin for navbar font size
+@mixin apply-navbar-size($sizeMap: vars.$FontSize, $sizeKey: 'mediano') {
+  @if map.has-key($sizeMap, $sizeKey) {
+    font-size: map.get($sizeMap, $sizeKey);
+  } @else {
+    font-size: map.get(vars.$font-sizes, 'base');
+  }
+}
+
+// Modernized mixin for navbar link fonts
+@mixin apply-navbar-link-font($fontPack: vars.$FontPack1, $fontKey: 'Texto') {
+  @if map.has-key($fontPack, $fontKey) {
+    font-family: map.get($fontPack, $fontKey);
+  } @else {
+    font-family: map.get(vars.$font-pack-classic, 'body'), vars.$font-stack-sans;
+  }
+}
+
+// =============================================================================
+// NAVBAR VARIANTS - FULLY MODERNIZED
+// =============================================================================
+
+// Modern navbar variant
+.navbar--modern {
+  @extend .navbar;
+  @include apply-navbar-font(vars.$font-pack-modern, 'title');
+  background: linear-gradient(135deg, vars.$colorbg-primario, vars.$colorBg-secundario);
+  box-shadow: map.get(vars.$shadows, 'md');
+}
+
+// Classic navbar variant
+.navbar--classic {
+  @extend .navbar;
+  @include apply-navbar-font(vars.$font-pack-classic, 'title');
+  border-bottom: 2px solid vars.$color-primario;
+}
+
+// Minimal navbar variant
+.navbar--minimal {
+  @extend .navbar;
+  @include apply-navbar-font(vars.$font-pack-minimal, 'title');
+  background: transparent;
+  border-bottom: 1px solid rgba(vars.$color-secundario, 0.2);
+}
+
+// Editorial navbar variant
+.navbar--editorial {
+  @extend .navbar;
+  font-family: map.get(vars.$font-pack-editorial, 'title'), vars.$font-stack-serif;
+  background: vars.$colorBg-secundario;
+}
+
+// =============================================================================
+// RESPONSIVE NAVBAR BEHAVIOR
+// =============================================================================
+
+// Mobile navigation toggle
+.navbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: vars.$FontColorBase;
+  font-size: map.get(vars.$font-sizes, 'xl');
+  cursor: pointer;
+  padding: 0.5rem;
+  
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+// Mobile navigation menu
+.navbar__nav {
+  @media (max-width: 768px) {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: vars.$colorbg-primario;
+    flex-direction: column;
+    padding: 1rem;
+    box-shadow: map.get(vars.$shadows, 'lg');
+    
+    &--open {
+      display: flex;
+    }
+  }
+}
+
+.navbar__nav-item {
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.navbar__nav-link {
+  @media (max-width: 768px) {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+  }
+}
+
+// =============================================================================
+// NAVBAR UTILITY CLASSES
+// =============================================================================
+
+// Fixed navbar
+.navbar--fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+// Transparent navbar
+.navbar--transparent {
+  background: transparent;
+  backdrop-filter: blur(10px);
+}
+
+// Bordered navbar
+.navbar--bordered {
+  border: 1px solid vars.$color-secundario;
+  border-radius: map.get(vars.$border-radius, 'lg');
+  margin: 1rem;
+}
+
+// =============================================================================
+// FONT PACK COMPATIBILITY HELPERS - FULLY MODERNIZED
+// =============================================================================
+
+// Helper class for applying font pack 1
+.navbar--fontpack1 {
+  @if map.has-key(vars.$FontPack1, 'Titulo') {
+    font-family: map.get(vars.$FontPack1, 'Titulo');
+  }
+  
+  .navbar__nav-link {
+    @if map.has-key(vars.$FontPack1, 'Texto') {
+      font-family: map.get(vars.$FontPack1, 'Texto');
+    }
+  }
+}
+
+// Helper class for applying font pack 2
+.navbar--fontpack2 {
+  @if map.has-key(vars.$FontPack2, 'Titulo') {
+    font-family: map.get(vars.$FontPack2, 'Titulo');
+  }
+  
+  .navbar__nav-link {
+    @if map.has-key(vars.$FontPack2, 'Texto') {
+      font-family: map.get(vars.$FontPack2, 'Texto');
+    }
+  }
+}
+
+// Generic font pack application mixin
+@mixin apply-font-pack($pack-name, $title-key: 'Titulo', $text-key: 'Texto') {
+  @if map.has-key($pack-name, $title-key) {
+    font-family: map.get($pack-name, $title-key);
+  }
+  
+  .navbar__nav-link {
+    @if map.has-key($pack-name, $text-key) {
+      font-family: map.get($pack-name, $text-key);
+    }
+  }
+}
+
+// =============================================================================
+// NAVBAR DROPDOWN MENUS
+// =============================================================================
+
+.navbar__dropdown {
+  position: relative;
+  
+  .navbar__dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: vars.$colorbg-primario;
+    border: 1px solid vars.$color-secundario;
+    border-radius: map.get(vars.$border-radius, 'md');
+    box-shadow: map.get(vars.$shadows, 'lg');
+    min-width: 200px;
+    padding: 0.5rem 0;
+    z-index: 1000;
+  }
+  
+  &:hover .navbar__dropdown-menu {
+    display: block;
+  }
+}
+
+.navbar__dropdown-item {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: vars.$FontColorBase;
+  text-decoration: none;
+  font-size: map.get(vars.$font-sizes, 'sm');
+  
+  &:hover {
+    background: rgba(vars.$color-secundario, 0.1);
+    color: vars.$color-secundario;
+  } 
+}
+
+// =============================================================================
+// NAVBAR ACCESSIBILITY ENHANCEMENTS
+// =============================================================================
+
+// Focus states for keyboard navigation
+.navbar__nav-link:focus,
+.navbar__dropdown-item:focus {
+  outline: 2px solid vars.$color-secundario;
+  outline-offset: 2px;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .navbar {
+    border-bottom-width: 2px;
+  }
+  
+  .navbar__nav-link {
+    border: 1px solid transparent;
+    
+    &:hover,
+    &:focus {
+      border-color: currentColor;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .navbar__nav-link {
+    transition: none;
+  }
+}

@@ -1,0 +1,547 @@
+@use 'sass:map';
+@use 'sass:color';
+@use 'Shadow' as *;
+@use 'Variables' as *;
+
+// ========================================
+// MIXINS CENTRALIZADOS
+// ========================================
+
+@mixin button-base {
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: all 0.3s ease;
+  font-family: map.get($font-pack-modern, 'body'), $font-stack-sans; // Usando el font pack moderno
+  text-align: center;
+  outline: none;
+  
+  &:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+@mixin button-size($size: medium) {
+  @if $size == small {
+    height: map.get($BtHeight, pequeno);
+    width: map.get($BtWidth, mediano);
+    padding: 8px 16px;
+    font-size: map.get($font-sizes, 'sm');
+    font-family: map.get($font-pack-minimal, 'body'), $font-stack-sans; // Fuente minimalista para pequeños
+  } @else if $size == medium {
+    height: map.get($BtHeight, mediano);
+    width: map.get($BtWidth, grande);
+    padding: 12px 24px;
+    font-size: map.get($font-sizes, 'base');
+    font-family: map.get($font-pack-modern, 'body'), $font-stack-sans; // Fuente principal
+  } @else if $size == large {
+    height: map.get($BtHeight, grande);
+    width: map.get($BtWidth, Xgrande);
+    padding: 16px 32px;
+    font-size: map.get($font-sizes, 'lg');
+    font-family: map.get($font-pack-modern, 'heading'), $font-stack-sans; // Fuente para heading en botones grandes
+  }
+}
+
+@mixin button-theme($primary-color, $secondary-color: null) {
+  $secondary: if($secondary-color, $secondary-color, color.adjust($primary-color, $lightness: 10%));
+  
+  background-color: $primary-color;
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: $secondary;
+    transform: translateY(-2px);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+@mixin button-shadow($type: default) {
+  @if $type == default {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    &:hover:not(:disabled) {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+  } @else if $type == elevated {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    
+    &:hover:not(:disabled) {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  } @else if $type == inset {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// ========================================
+// BOTONES BASE
+// ========================================
+
+%button-base {
+  @include button-base;
+  @include button-size(medium);
+  @include button-shadow(default);
+}
+
+// ========================================
+// VARIANTES DE BOTONES
+// ========================================
+
+// Botón Primario
+.btn {
+  @extend %button-base;
+  border-radius: 8px;
+  font-weight: map.get($font-weights, 'medium');
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: map.get($font-pack-modern, 'body'), $font-stack-sans; // Font pack moderno
+  
+  @include button-theme($color-primario);
+  
+  // Variantes de tema
+  &--theme-2 { @include button-theme($color-primarioB); }
+  &--theme-3 { @include button-theme($color-primarioC); }
+  &--theme-4 { @include button-theme($color-primarioD); }
+  
+  // Variantes de tamaño
+  &--small { 
+    @include button-size(small);
+    font-family: map.get($font-pack-minimal, 'body'), $font-stack-sans; // Fuente específica para botones pequeños
+    font-weight: map.get($font-weights, 'normal');
+  }
+  &--large { 
+    @include button-size(large);
+    font-family: map.get($font-pack-modern, 'heading'), $font-stack-sans; // Fuente para botones grandes
+    font-weight: map.get($font-weights, 'semibold');
+  }
+  
+  // Variantes de estilo
+  &--rounded {
+    border-radius: 50px;
+  }
+  
+  &--square {
+    border-radius: 0;
+  }
+  
+  &--outline {
+    background-color: transparent;
+    border: 2px solid $color-primario;
+    color: $color-primario;
+    font-family: map.get($font-pack-classic, 'body'), $font-stack-sans; // Fuente clásica para outline
+    font-weight: map.get($font-weights, 'medium');
+    
+    &:hover:not(:disabled) {
+      background-color: $color-primario;
+      color: white;
+    }
+    
+    &.btn--theme-2 {
+      border-color: $color-primarioB;
+      color: $color-primarioB;
+      
+      &:hover:not(:disabled) {
+        background-color: $color-primarioB;
+        color: white;
+      }
+    }
+    
+    &.btn--theme-3 {
+      border-color: $color-primarioC;
+      color: $color-primarioC;
+      
+      &:hover:not(:disabled) {
+        background-color: $color-primarioC;
+        color: white;
+      }
+    }
+    
+    &.btn--theme-4 {
+      border-color: $color-primarioD;
+      color: $color-primarioD;
+      
+      &:hover:not(:disabled) {
+        background-color: $color-primarioD;
+        color: white;
+      }
+    }
+  }
+  
+  &--ghost {
+    background-color: transparent;
+    color: $color-primario;
+    box-shadow: none;
+    font-family: map.get($font-pack-minimal, 'body'), $font-stack-sans; // Fuente sutil para botones ghost
+    font-weight: map.get($font-weights, 'light');
+    
+    &:hover:not(:disabled) {
+      background-color: rgba($color-primario, 0.1);
+    }
+  }
+}
+
+// Botón con Animación de Relleno
+.btn-fill {
+  @extend %button-base;
+  position: relative;
+  border: 2px solid $color-primario;
+  background-color: transparent;
+  color: $color-primario;
+  overflow: hidden;
+  z-index: 1;
+  font-family: map.get($font-pack-classic, 'heading'), $font-stack-sans; // Fuente clásica para efectos animados
+  font-weight: map.get($font-weights, 'medium');
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: $color-primario;
+    transition: left 0.3s ease;
+    z-index: -1;
+  }
+  
+  &:hover:not(:disabled) {
+    color: white;
+    
+    &::before {
+      left: 0;
+    }
+  }
+  
+  // Variantes de tema
+  &--theme-2 {
+    border-color: $color-primarioB;
+    color: $color-primarioB;
+    
+    &::before { background-color: $color-primarioB; }
+  }
+  
+  &--theme-3 {
+    border-color: $color-primarioC;
+    color: $color-primarioC;
+    
+    &::before { background-color: $color-primarioC; }
+  }
+  
+  &--theme-4 {
+    border-color: $color-primarioD;
+    color: $color-primarioD;
+    
+    &::before { background-color: $color-primarioD; }
+  }
+}
+
+// Botón 3D/Tap
+.btn-3d {
+  @extend %button-base;
+  border-radius: 12px;
+  background-color: $color-primario;
+  color: white;
+  font-weight: map.get($font-weights, 'bold');
+  font-family: map.get($font-pack-editorial, 'heading'), $font-stack-serif; // Fuente editorial para botones 3D
+  position: relative;
+  transform: translateY(-4px);
+  
+  box-shadow: 0 4px 0 0 rgba($color-primario, 0.7);
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-6px);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: none;
+  }
+  
+  // Variantes de tema
+  &--theme-2 {
+    background-color: $color-primarioB;
+    box-shadow: 0 4px 0 0 rgba($color-primarioB, 0.7);
+  }
+  
+  &--theme-3 {
+    background-color: $color-primarioC;
+    box-shadow: 0 4px 0 0 rgba($color-primarioC, 0.7);
+  }
+  
+  &--theme-4 {
+    background-color: $color-primarioD;
+    box-shadow: 0 4px 0 0 rgba($color-primarioD, 0.7);
+  }
+}
+
+// Botón con Efecto de Esquinas
+.btn-corner {
+  @extend %button-base;
+  --border-size: 3px;
+  --corner-size: 0.75em;
+  
+  padding: calc(0.5em + var(--corner-size)) calc(0.9em + var(--corner-size));
+  color: white;
+  font-family: map.get($font-pack-editorial, 'title'), $font-stack-serif; // Fuente editorial para efectos especiales
+  font-weight: map.get($font-weights, 'semibold');
+  background: conic-gradient(
+    from 90deg at var(--border-size) var(--border-size),
+    transparent 90deg,
+    $color-primario 0
+  ) var(--corner-size) var(--corner-size) / 
+  calc(100% - var(--border-size) - 2 * var(--corner-size)) 
+  calc(100% - var(--border-size) - 2 * var(--corner-size));
+  
+  outline: var(--border-size) solid transparent;
+  outline-offset: 0.6em;
+  
+  &:hover:not(:disabled) {
+    --corner-size: 0px;
+    outline-color: $color-primario;
+    outline-offset: 0.05em;
+  }
+  
+  &:active:not(:disabled) {
+    background: $color-primario;
+    color: white;
+  }
+  
+  // Variantes de tema
+  &--theme-2 {
+    background: conic-gradient(
+      from 90deg at var(--border-size) var(--border-size),
+      transparent 90deg,
+      $color-primarioB 0
+    ) var(--corner-size) var(--corner-size) / 
+    calc(100% - var(--border-size) - 2 * var(--corner-size)) 
+    calc(100% - var(--border-size) - 2 * var(--corner-size));
+    
+    &:hover:not(:disabled) { outline-color: $color-primarioB; }
+    &:active:not(:disabled) { background: $color-primarioB; }
+  }
+  
+  &--theme-3 {
+    background: conic-gradient(
+      from 90deg at var(--border-size) var(--border-size),
+      transparent 90deg,
+      $color-primarioC 0
+    ) var(--corner-size) var(--corner-size) / 
+    calc(100% - var(--border-size) - 2 * var(--corner-size)) 
+    calc(100% - var(--border-size) - 2 * var(--corner-size));
+    
+    &:hover:not(:disabled) { outline-color: $color-primarioC; }
+    &:active:not(:disabled) { background: $color-primarioC; }
+  }
+  
+  &--theme-4 {
+    background: conic-gradient(
+      from 90deg at var(--border-size) var(--border-size),
+      transparent 90deg,
+      $color-primarioD 0
+    ) var(--corner-size) var(--corner-size) / 
+    calc(100% - var(--border-size) - 2 * var(--corner-size)) 
+    calc(100% - var(--border-size) - 2 * var(--corner-size));
+    
+    &:hover:not(:disabled) { outline-color: $color-primarioD; }
+    &:active:not(:disabled) { background: $color-primarioD; }
+  }
+}
+
+// Botón Flotante
+.btn-float {
+  @extend %button-base;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  background-color: $color-primario;
+  color: white;
+  font-family: map.get($font-pack-modern, 'body'), $font-stack-sans; // Fuente consistente para botones flotantes
+  
+  @include button-shadow(elevated);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover:not(:disabled) {
+    transform: scale(1.1);
+  }
+  
+  &--large {
+    width: 72px;
+    height: 72px;
+    font-size: map.get($font-sizes, 'xl');
+    font-family: map.get($font-pack-modern, 'heading'), $font-stack-sans; // Fuente más prominente para botones grandes
+  }
+  
+  &--small {
+    width: 40px;
+    height: 40px;
+    font-size: map.get($font-sizes, 'sm');
+    font-family: map.get($font-pack-minimal, 'body'), $font-stack-sans; // Fuente más sutil para botones pequeños
+  }
+}
+
+// ========================================
+// GRUPOS DE BOTONES
+// ========================================
+
+.btn-group {
+  display: inline-flex;
+  font-family: map.get($font-pack-modern, 'body'), $font-stack-sans; // Fuente consistente para grupos
+  
+  .btn {
+    margin: 0;
+    border-radius: 0;
+    
+    &:first-child {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+    
+    &:last-child {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+    
+    &:not(:last-child) {
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  }
+  
+  &--vertical {
+    flex-direction: column;
+    
+    .btn {
+      &:first-child {
+        border-radius: 8px 8px 0 0;
+      }
+      
+      &:last-child {
+        border-radius: 0 0 8px 8px;
+      }
+      
+      &:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}
+
+// ========================================
+// UTILIDADES
+// ========================================
+
+.btn-loading {
+  position: relative;
+  color: transparent !important;
+  font-family: map.get($font-pack-modern, 'body'), $font-stack-sans; // Mantener fuente consistente
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: btn-spin 1s linear infinite;
+  }
+}
+
+@keyframes btn-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// ========================================
+// RESPONSIVE
+// ========================================
+
+@media screen and (max-width: 768px) {
+  .btn {
+    padding: 12px 20px;
+    font-size: map.get($font-sizes, 'sm');
+    font-family: map.get($font-pack-minimal, 'body'), $font-stack-sans; // Fuente optimizada para móvil
+    
+    &--large {
+      padding: 14px 24px;
+      font-size: map.get($font-sizes, 'base');
+      font-family: map.get($font-pack-modern, 'body'), $font-stack-sans; // Mantener fuente principal en tamaños grandes
+    }
+    
+    &--small {
+      padding: 8px 12px;
+      font-size: map.get($font-sizes, 'xs');
+      font-family: map.get($font-pack-minimal, 'body'), $font-stack-sans; // Fuente compacta para móvil
+    }
+  }
+  
+  .btn-group {
+    flex-direction: column;
+    
+    .btn {
+      &:first-child { border-radius: 8px 8px 0 0; }
+      &:last-child { border-radius: 0 0 8px 8px; }
+      &:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}
+
+// ========================================
+// CLASES DE COMPATIBILIDAD (LEGACY)
+// ========================================
+
+// Mapeo de clases antiguas a nuevas para mantener compatibilidad
+.buttontest { @extend .btn; }
+.buttontest_Th2 { @extend .btn, .btn--theme-2; }
+.buttontest_Th3 { @extend .btn, .btn--theme-3; }
+.buttontest_Th4 { @extend .btn, .btn--theme-4; }
+
+.butontest_round { @extend .btn, .btn--rounded; }
+.butontest_round_Th2 { @extend .btn, .btn--rounded, .btn--theme-2; }
+.butontest_round_Th3 { @extend .btn, .btn--rounded, .btn--theme-3; }
+.butontest_round_Th4 { @extend .btn, .btn--rounded, .btn--theme-4; } 
+
+.button_animated_Th { @extend .btn-fill; }
+.button_animated_Th2 { @extend .btn-fill, .btn-fill--theme-2; }
+.button_animated_Th3 { @extend .btn-fill, .btn-fill--theme-3; }
+.button_animated_Th4 { @extend .btn-fill, .btn-fill--theme-4; }
+
+.button_Squear_Th { @extend .btn, .btn--square; }
+.button_Squear_Th2 { @extend .btn, .btn--square, .btn--theme-2; }
+.button_Squear_Th3 { @extend .btn, .btn--square, .btn--theme-3; }
+.button_Squear_Th4 { @extend .btn, .btn--square, .btn--theme-4; }
+
+.Tap_Button { @extend .btn-3d; }
+.Tap_Button_Th2 { @extend .btn-3d, .btn-3d--theme-2; }
+.Tap_Button_Th3 { @extend .btn-3d, .btn-3d--theme-3; }
+.Tap_Button_Th4 { @extend .btn-3d, .btn-3d--theme-4; }
+
+.button-3_Th { @extend .btn-corner; }
+.button-3_Th2 { @extend .btn-corner, .btn-corner--theme-2; } 
+.button-3_Th3 { @extend .btn-corner, .btn-corner--theme-3; }
+.button-3_Th4 { @extend .btn-corner, .btn-corner--theme-4; }

@@ -1,0 +1,941 @@
+@use 'Variables' as vars;
+@use 'Utilitdades' as utils;
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:math';
+@use 'sass:meta'; // Added for type-of replacement
+
+// ========================================
+// VARIABLES Y CONFIGURACIÓN
+// ========================================
+
+$container-padding: 1.5rem;
+$container-margin: 1rem;
+$container-border-radius: 8px;
+$container-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$container-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.1);
+$container-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+// Use breakpoints from utils (Utilitdades) module
+$breakpoints: utils.$breakpoints;
+
+// ========================================
+// MIXINS DE UTILIDAD
+// ========================================
+
+@mixin container-base {
+  box-sizing: border-box;
+  position: relative;
+  transition: $container-transition;
+}
+
+@mixin container-spacing($padding: $container-padding, $margin: $container-margin) {
+  padding: $padding;
+  margin: $margin;
+}
+
+@mixin container-shadow($type: base) {
+  @if $type == base {
+    box-shadow: $container-shadow-base;
+  } @else if $type == hover {
+    box-shadow: $container-shadow-hover;
+  } @else if $type == none {
+    box-shadow: none;
+  } @else if $type == inset {
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@mixin hover-lift($lift: 4px) {
+  &:hover {
+    transform: translateY(-$lift);
+    @include container-shadow(hover);
+  }
+}
+
+@mixin responsive-font($min-size, $max-size, $min-width: 320px, $max-width: 1200px) {
+  font-size: calc(#{$min-size} + #{strip-unit($max-size - $min-size)} * ((100vw - #{$min-width}) / #{strip-unit($max-width - $min-width)}));
+}
+
+// Fixed deprecated function usage
+@function strip-unit($number) {
+  @if meta.type-of($number) == 'number' and not math.is-unitless($number) {
+    @return math.div($number, ($number * 0 + 1));
+  }
+  @return $number;
+}
+
+// ========================================
+// SISTEMA DE CONTENEDORES BASE
+// ========================================
+
+.container {
+  @include container-base;
+  width: 100%;
+  margin: 0 auto;
+  font-family: map.get(vars.$font-pack-classic, 'body'), vars.$font-stack-sans;
+
+  // Variantes de ancho máximo
+  &--fluid {
+    max-width: none;
+    width: 100%;
+  }
+
+  &--xs {
+    max-width: map.get($breakpoints, sm);
+  }
+
+  &--sm {
+    max-width: map.get($breakpoints, md);
+  }
+
+  &--md {
+    max-width: map.get($breakpoints, lg);
+  }
+
+  &--lg {
+    max-width: map.get($breakpoints, xl);
+  }
+
+  &--xl {
+    max-width: map.get($breakpoints, xxl);
+  }
+
+  // Variantes de padding
+  &--no-padding {
+    padding: 0;
+  }
+
+  &--tight {
+    padding: 0.75rem;
+  }
+
+  &--loose {
+    padding: 3rem;
+  }
+
+  // Variantes de altura
+  &--full-height {
+    min-height: 100vh;
+  }
+
+  &--content-height {
+    height: auto;
+  }
+}
+
+// ========================================
+// CONTENEDORES ESPECIALIZADOS
+// ========================================
+
+// Container para imágenes fluidas
+.container-image {
+  @include container-base;
+  position: relative;
+  overflow: hidden;
+  border-radius: $container-border-radius;
+
+  &--fluid {
+    height: 80vh;
+    width: 100%;
+  }
+
+  &--regular {
+    height: 60vh;
+    aspect-ratio: 16/9;
+  }
+
+  &--square {
+    aspect-ratio: 1;
+  }
+
+  &--portrait {
+    aspect-ratio: 3/4;
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.7) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    padding: 2rem;
+  }
+
+  .overlay-content {
+    color: white;
+    font-family: map.get(vars.$font-pack-modern, 'body'), vars.$font-stack-sans;
+
+    .title {
+      font-family: map.get(vars.$font-pack-modern, 'title'), vars.$font-stack-sans;
+      font-size: map.get(vars.$font-sizes, 'xl');
+      font-weight: map.get(vars.$font-weights, 'semibold');
+      margin: 0 0 0.5rem 0;
+    }
+
+    .description {
+      font-family: map.get(vars.$font-pack-modern, 'body'), vars.$font-stack-sans;
+      font-size: map.get(vars.$font-sizes, 'sm');
+      opacity: 0.9;
+      margin: 0;
+    }
+  }
+
+  &:hover {
+    .image {
+      transform: scale(1.05);
+    }
+
+    .overlay {
+      opacity: 1;
+    }
+  }
+}
+
+// Container de contenido
+.container-content {
+  @include container-base;
+  @include container-spacing;
+  background: white;
+  border-radius: $container-border-radius;
+  @include container-shadow(base);
+  @include hover-lift;
+  font-family: map.get(vars.$font-pack-classic, 'body'), vars.$font-stack-sans;
+
+  // Variantes de altura
+  &--regular {
+    height: 60vh;
+    border: 1px solid rgba(vars.$color-secundario, 0.2);
+    background-color: vars.$GrayRdBg;
+  }
+
+  &--fluid {
+    margin-top: 10vh;
+    height: 80vh;
+  }
+
+  &--full {
+    height: 100vh;
+    background-color: vars.$colorbg-primarioC;
+    border: 1px solid rgba(vars.$colorBg-secundarioC, 0.3);
+  }
+
+  // Variantes de tema
+  &--primary {
+    background: linear-gradient(135deg, vars.$color-primario, color.scale(vars.$color-primario, $lightness: 10%));
+    color: white;
+  }
+
+  &--secondary {
+    background: linear-gradient(135deg, vars.$color-secundario, color.scale(vars.$color-secundario, $lightness: 10%));
+    color: white;
+  }
+
+  &--dark {
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #333;
+  }
+
+  &--light {
+    background: #f8f9fa;
+    color: #333;
+    border: 1px solid #e9ecef;
+  }
+
+  // Elementos internos
+  .header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    .title {
+      margin: 0 0 0.5rem 0;
+      font-family: map.get(vars.$font-pack-classic, 'title'), vars.$font-stack-sans;
+      @include responsive-font(map.get(vars.$font-sizes, 'xl'), map.get(vars.$font-sizes, '4xl'));
+      font-weight: map.get(vars.$font-weights, 'bold');
+      line-height: map.get(vars.$line-heights, 'tight');
+      color: vars.$color-primario;
+
+      &::first-letter {
+        font-size: 1.2em;
+        color: vars.$color-secundario;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .subtitle {
+      margin: 0;
+      font-family: map.get(vars.$font-pack-classic, 'heading'), vars.$font-stack-sans;
+      @include responsive-font(map.get(vars.$font-sizes, 'base'), map.get(vars.$font-sizes, 'xl'));
+      opacity: 0.8;
+      font-weight: map.get(vars.$font-weights, 'normal');
+    }
+  }
+
+  .content {
+    font-family: map.get(vars.$font-pack-classic, 'body'), vars.$font-stack-sans;
+    @include responsive-font(map.get(vars.$font-sizes, 'sm'), map.get(vars.$font-sizes, 'lg'));
+    line-height: map.get(vars.$line-heights, 'relaxed');
+    color: inherit;
+
+    p {
+      margin: 0 0 1rem 0;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &::first-letter {
+        font-size: 1.3em;
+        font-weight: map.get(vars.$font-weights, 'medium');
+        color: vars.$color-secundario;
+      }
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: map.get(vars.$font-pack-classic, 'heading'), vars.$font-stack-sans;
+      margin: 1.5rem 0 1rem 0;
+      line-height: map.get(vars.$line-heights, 'tight');
+      font-weight: map.get(vars.$font-weights, 'semibold');
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    ul,
+    ol {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+
+      li {
+        font-family: map.get(vars.$font-pack-classic, 'body'), vars.$font-stack-sans;
+        line-height: map.get(vars.$line-heights, 'normal');
+      }
+    }
+
+    blockquote {
+      margin: 1.5rem 0;
+      padding: 1rem 1.5rem;
+      border-left: 4px solid vars.$color-primario;
+      background: rgba(vars.$color-primario, 0.05);
+      font-style: italic;
+      font-family: map.get(vars.$font-pack-editorial, 'body'), vars.$font-stack-sans;
+    }
+  }
+
+  .footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-family: map.get(vars.$font-pack-minimal, 'body'), vars.$font-stack-sans;
+    font-size: map.get(vars.$font-sizes, 'sm');
+  }
+}
+
+// ========================================
+// CONTENEDORES DE INFORMACIÓN
+// ========================================
+
+.info-container {
+  @include container-base;
+  @include container-spacing;
+  border: 1px solid rgba(vars.$color-secundario, 0.3);
+  background: white;
+  border-radius: $container-border-radius;
+  @include container-shadow(base);
+  font-family: map.get(vars.$font-pack-modern, 'body'), vars.$font-stack-sans;
+
+  &__header {
+    margin-bottom: 1.5rem;
+
+    .title {
+      color: vars.$color-secundario;
+      font-family: map.get(vars.$font-pack-modern, 'title'), vars.$font-stack-sans;
+      font-size: map.get(vars.$font-sizes, 'xl');
+      font-weight: map.get(vars.$font-weights, 'semibold');
+      margin: 0;
+
+      &::first-letter {
+        font-size: 1.2em;
+        color: vars.$color-primario;
+      }
+    }
+  }
+
+  &__content {
+    background: #fff;
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: $container-border-radius;
+    margin-top: 1rem;
+
+    .subtitle {
+      color: vars.$color-secundario;
+      font-family: map.get(vars.$font-pack-modern, 'heading'), vars.$font-stack-sans;
+      font-size: map.get(vars.$font-sizes, 'lg');
+      font-weight: map.get(vars.$font-weights, 'medium');
+      margin: 0 0 1rem 0;
+    }
+
+    p,
+    ul,
+    ol {
+      margin: 0 0 1rem 0;
+      font-family: map.get(vars.$font-pack-modern, 'body'), vars.$font-stack-sans;
+      line-height: map.get(vars.$line-heights, 'normal');
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // Variantes
+  &--success {
+    border-color: #28a745;
+
+    .info-container__header .title {
+      color: #28a745;
+    }
+  }
+
+  &--warning {
+    border-color: #ffc107;
+    background: rgba(#ffc107, 0.05);
+
+    .info-container__header .title {
+      color: #856404;
+    }
+  }
+
+  &--error {
+    border-color: #dc3545;
+    background: rgba(#dc3545, 0.05);
+
+    .info-container__header .title {
+      color: #dc3545;
+    }
+  }
+
+  &--info {
+    border-color: #17a2b8;
+    background: rgba(#17a2b8, 0.05);
+
+    .info-container__header .title {
+      color: #17a2b8;
+    }
+  }
+}
+
+// ========================================
+// CONTENEDORES DE DOCUMENTACIÓN
+// ========================================
+
+.doc-container {
+  @include container-base;
+  background-color: vars.$colorbg-primario;
+  padding: 2rem;
+  font-family: map.get(vars.$font-pack-editorial, 'body'), vars.$font-stack-sans;
+
+  &__section {
+    box-shadow: 0 2px 0 0 rgba(white, 0.8);
+    margin-bottom: 2rem;
+    padding: 2rem 0 2rem 5%;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__title {
+    margin: 0 0 1rem 0;
+    font-family: map.get(vars.$font-pack-editorial, 'title'), vars.$font-stack-serif;
+    text-shadow: -3px 0px rgba(vars.$color-secundario, 0.3);
+    display: block;
+    color: vars.$color-primario;
+    font-size: clamp(map.get(vars.$font-sizes, 'xl'), 4vw, map.get(vars.$font-sizes, '5xl'));
+    font-weight: map.get(vars.$font-weights, 'bold');
+    line-height: map.get(vars.$line-heights, 'tight');
+
+    &::first-letter {
+      font-size: 1.2em;
+      color: vars.$color-secundario;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    // Variantes
+    &--hero {
+      font-size: clamp(map.get(vars.$font-sizes, '3xl'), 6vw, map.get(vars.$font-sizes, '6xl'));
+      text-align: center;
+      background: linear-gradient(135deg, vars.$color-primario, vars.$color-secundario);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    &--modern {
+      font-family: map.get(vars.$font-pack-modern, 'title'), vars.$font-stack-sans;
+    }
+
+    &--classic {
+      font-family: map.get(vars.$font-pack-classic, 'title'), vars.$font-stack-sans;
+    }
+
+    &--minimal {
+      font-family: map.get(vars.$font-pack-minimal, 'title'), vars.$font-stack-sans;
+    }
+  }
+
+  &__subtitle {
+    font-family: map.get(vars.$font-pack-editorial, 'heading'), vars.$font-stack-serif;
+    font-size: clamp(map.get(vars.$font-sizes, 'lg'), 3vw, map.get(vars.$font-sizes, '3xl'));
+    color: vars.$color-primario;
+    font-weight: map.get(vars.$font-weights, 'semibold');
+    margin: 0 0 1.5rem 0;
+    line-height: map.get(vars.$line-heights, 'tight');
+  }
+
+  &__content {
+    margin: 2rem 0;
+    width: 100%;
+    max-width: 90%;
+    background-color: color.scale(vars.$colorbg-primario, $lightness: 10%);
+    padding: 1.5rem;
+    border: 2px solid rgba(white, 0.8);
+    border-radius: $container-border-radius;
+    @include container-shadow(base);
+
+    .title {
+      font-family: map.get(vars.$font-pack-editorial, 'heading'), vars.$font-stack-serif;
+      color: vars.$color-primario;
+      font-size: map.get(vars.$font-sizes, 'xl');
+      font-weight: map.get(vars.$font-weights, 'semibold');
+      margin: 0 0 1rem 0;
+
+      &::first-letter {
+        font-size: 1.2em;
+        color: vars.$color-secundario;
+      }
+    }
+
+    p {
+      font-family: map.get(vars.$font-pack-editorial, 'body'), vars.$font-stack-sans;
+      line-height: map.get(vars.$line-heights, 'relaxed');
+      margin: 0 0 1rem 0;
+      font-size: map.get(vars.$font-sizes, 'base');
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &::first-letter {
+        font-size: 1.3em;
+        font-weight: map.get(vars.$font-weights, 'medium');
+        color: vars.$color-secundario;
+      }
+    }
+
+    pre {
+      background: rgba(0, 0, 0, 0.05);
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1rem 0;
+      font-family: vars.$font-stack-mono;
+      font-size: map.get(vars.$font-sizes, 'sm');
+
+      code {
+        background: none;
+        padding: 0;
+        border-radius: 0;
+      }
+    }
+
+    code {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-family: vars.$font-stack-mono;
+      font-size: 0.85em;
+    }
+
+    ul,
+    ol {
+      margin: 1rem 0;
+      padding-left: 2rem;
+      font-family: map.get(vars.$font-pack-editorial, 'body'), vars.$font-stack-sans;
+
+      li {
+        margin-bottom: 0.5rem;
+        line-height: map.get(vars.$line-heights, 'normal');
+      }
+    }
+  }
+
+  // Variantes de tema
+  &--modern {
+    font-family: map.get(vars.$font-pack-modern, 'body'), vars.$font-stack-sans;
+
+    .doc-container__title {
+      font-family: map.get(vars.$font-pack-modern, 'title'), vars.$font-stack-sans;
+    }
+
+    .doc-container__subtitle {
+      font-family: map.get(vars.$font-pack-modern, 'heading'), vars.$font-stack-sans;
+    }
+
+    .doc-container__content {
+      .title {
+        font-family: map.get(vars.$font-pack-modern, 'heading'), vars.$font-stack-sans;
+      }
+
+      p,
+      ul,
+      ol {
+        font-family: map.get(vars.$font-pack-modern, 'body'), vars.$font-stack-sans;
+      }
+    }
+  }
+
+  &--classic {
+    font-family: map.get(vars.$font-pack-classic, 'body'), vars.$font-stack-sans;
+
+    .doc-container__title {
+      font-family: map.get(vars.$font-pack-classic, 'title'), vars.$font-stack-sans;
+    }
+
+    .doc-container__subtitle {
+      font-family: map.get(vars.$font-pack-classic, 'heading'), vars.$font-stack-sans;
+    }
+
+    .doc-container__content {
+      .title {
+        font-family: map.get(vars.$font-pack-classic, 'heading'), vars.$font-stack-sans;
+      }
+
+      p,
+      ul,
+      ol {
+        font-family: map.get(vars.$font-pack-classic, 'body'), vars.$font-stack-sans;
+      }
+    }
+  }
+
+  &--minimal {
+    font-family: map.get(vars.$font-pack-minimal, 'body'), vars.$font-stack-sans;
+
+    .doc-container__title {
+      font-family: map.get(vars.$font-pack-minimal, 'title'), vars.$font-stack-sans;
+    }
+
+    .doc-container__subtitle {
+      font-family: map.get(vars.$font-pack-minimal, 'heading'), vars.$font-stack-sans;
+    }
+
+    .doc-container__content {
+      .title {
+        font-family: map.get(vars.$font-pack-minimal, 'heading'), vars.$font-stack-sans;
+      }
+
+      p,
+      ul,
+      ol {
+        font-family: map.get(vars.$font-pack-minimal, 'body'), vars.$font-stack-sans;
+      }
+    }
+  }
+}
+
+// ========================================
+// GRID Y LAYOUT SYSTEM
+// ========================================
+
+.grid {
+  display: grid;
+  gap: 1rem;
+
+  &--1 {
+    grid-template-columns: 1fr;
+  }
+
+  &--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  &--auto {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  &--auto-fill {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  // Gaps
+  &--gap-sm {
+    gap: 0.5rem;
+  }
+
+  &--gap-lg {
+    gap: 2rem;
+  }
+
+  &--gap-xl {
+    gap: 3rem;
+  }
+}
+
+.flex {
+  display: flex;
+
+  &--column {
+    flex-direction: column;
+  }
+
+  &--row {
+    flex-direction: row;
+  }
+
+  &--wrap {
+    flex-wrap: wrap;
+  }
+
+  &--nowrap {
+    flex-wrap: nowrap;
+  }
+
+  &--center {
+    justify-content: center;
+    align-items: center;
+  }
+
+  &--between {
+    justify-content: space-between;
+  }
+
+  &--around {
+    justify-content: space-around;
+  }
+
+  &--evenly {
+    justify-content: space-evenly;
+  }
+
+  &--start {
+    justify-content: flex-start;
+  }
+
+  &--end {
+    justify-content: flex-end;
+  }
+}
+
+// ========================================
+// RESPONSIVE DESIGN
+// ========================================
+
+@each $breakpoint, $width in $breakpoints {
+  @if $width > 0 {
+    @media (max-width: $width) {
+      .container-content {
+        padding: 1rem;
+        margin: 0.5rem;
+
+        .header .title {
+          font-size: clamp(map.get(vars.$font-sizes, 'lg'), 4vw, map.get(vars.$font-sizes, '2xl'));
+        }
+
+        .content {
+          font-size: clamp(map.get(vars.$font-sizes, 'sm'), 2.5vw, map.get(vars.$font-sizes, 'base'));
+        }
+      }
+
+      .doc-container {
+        padding: 1rem;
+
+        &__section {
+          padding-left: 2%;
+        }
+
+        &__content {
+          max-width: 100%;
+          padding: 1rem;
+        }
+      }
+
+      .grid {
+        &--2,
+        &--3,
+        &--4 {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}
+
+// Tablet específico
+@media screen and (max-width: 768px) and (min-width: 481px) {
+  .grid {
+    &--3,
+    &--4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+// Móvil específico
+@media screen and (max-width: 480px) {
+  .container-content {
+    &--regular,
+    &--fluid,
+    &--full {
+      height: auto;
+      min-height: 50vh;
+    }
+  }
+
+  .container-image {
+    &--fluid {
+      height: 50vh;
+    }
+
+    &--regular {
+      height: 40vh;
+    }
+  }
+
+  .doc-container__title {
+    font-size: clamp(map.get(vars.$font-sizes, 'lg'), 5vw, map.get(vars.$font-sizes, '3xl'));
+  }
+
+  h3 {
+    font-size: map.get(vars.$font-sizes, 'base');
+  }
+}
+
+// ========================================
+// ESTADOS Y UTILIDADES
+// ========================================
+
+.container--loading {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent);
+    animation: loading-shimmer 1.5s infinite;
+    z-index: 1;
+  }
+}
+
+@keyframes loading-shimmer {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+.container--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  filter: grayscale(0.5);
+}
+
+.container--interactive {
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// ========================================
+// COMPATIBILIDAD LEGACY
+// ========================================
+
+// Mapeo de clases antiguas a nuevas
+.container-img_fluid_set {
+  @extend .container-image--fluid;
+}
+
+.container-regular {
+  @extend .container-content--regular;
+}
+
+.container-fluid {
+  @extend .container-content--fluid;
+}
+
+.container-full-width {
+  @extend .container-content--full;
+}
+
+.Documentacion-seccion {
+  @extend .doc-container__section;
+}
+
+.Titulo_special {
+  @extend .doc-container__title;
+}
+
+.Documentacion-container {
+  @extend .doc-container;
+}
+
+.Documentacion-info-container-content {
+  @extend .doc-container__content; 
+}

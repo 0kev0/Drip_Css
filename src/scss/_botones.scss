@@ -1,0 +1,432 @@
+// ========================================
+// IMPORTS MODERNIZADOS - Usar @use en lugar de @import
+// ========================================
+@use 'Shadow' as shadow;
+@use 'Variables' as vars;
+@use 'sass:map';
+@use 'sass:color';
+
+// ========================================
+// CONFIGURACIÓN Y VARIABLES LOCALES
+// ========================================
+
+$button-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$button-border-radius: 8px;
+$button-font-weight: 500;
+
+// ========================================
+// MIXINS PARA BOTONES
+// ========================================
+
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: $button-transition;
+  border-radius: $button-border-radius;
+  font-weight: $button-font-weight;
+  line-height: 1.2;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  
+  // Estados base
+  &:focus {
+    outline: 2px solid var(--focus-color, #{vars.$color-primario});
+    outline-offset: 2px;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  // Efecto ripple
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+  }
+  
+  &:active::before {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@mixin button-size($height, $width, $font-size, $padding-x: 1rem) {
+  height: $height;
+  min-width: $width;
+  font-size: $font-size;
+  padding: 0 $padding-x;
+}
+
+@mixin button-variant($bg-color, $text-color: white, $hover-color: null) {
+  background-color: $bg-color;
+  color: $text-color;
+  
+  @if $hover-color {
+    &:hover:not(:disabled) {
+      background-color: $hover-color;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba($bg-color, 0.4);
+    }
+  } @else {
+    &:hover:not(:disabled) {
+      background-color: color.scale($bg-color, $lightness: -10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba($bg-color, 0.4);
+    }
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba($bg-color, 0.3);
+  }
+}
+
+// ========================================
+// ESTILOS BASE DE BOTONES
+// ========================================
+
+.btn {
+  @include button-base;
+  font-family: map.get(vars.$font-pack-modern, 'body'), vars.$font-stack-sans;
+  
+  // Tamaños usando el sistema modernizado
+  &--small {
+    @include button-size(
+      map.get(vars.$BtHeight, pequeno), 
+      map.get(vars.$BtWidth, pequeno), 
+      map.get(vars.$font-sizes, 'sm'),
+      0.75rem
+    );
+  }
+  
+  &--medium {
+    @include button-size(
+      map.get(vars.$BtHeight, mediano), 
+      map.get(vars.$BtWidth, grande), 
+      map.get(vars.$font-sizes, 'base')
+    );
+  }
+  
+  &--large {
+    @include button-size(
+      map.get(vars.$BtHeight, grande), 
+      map.get(vars.$BtWidth, extragrande), 
+      map.get(vars.$font-sizes, 'lg'),
+      1.5rem
+    );
+  }
+  
+  // Variantes de color usando la función modernizada
+  &--primary {
+    @include button-variant(vars.$color-primario);
+  }
+  
+  &--secondary {
+    @include button-variant(vars.$color-secundario);
+  }
+  
+  &--success {
+    @include button-variant(#28a745);
+  }
+  
+  &--danger {
+    @include button-variant(#dc3545);
+  }
+  
+  &--warning {
+    @include button-variant(#ffc107, #212529);
+  }
+  
+  &--info {
+    @include button-variant(#17a2b8);
+  }
+  
+  &--light {
+    @include button-variant(#f8f9fa, #212529);
+  }
+  
+  &--dark {
+    @include button-variant(#343a40);
+  }
+  
+  // Variantes de estilo
+  &--outline {
+    background-color: transparent;
+    border: 2px solid currentColor;
+    
+    &.btn--primary {
+      color: vars.$color-primario;
+      border-color: vars.$color-primario;
+      
+      &:hover:not(:disabled) {
+        background-color: vars.$color-primario;
+        color: white;
+      }
+    }
+    
+    &.btn--secondary {
+      color: vars.$color-secundario;
+      border-color: vars.$color-secundario;
+      
+      &:hover:not(:disabled) {
+        background-color: vars.$color-secundario;
+        color: white;
+      }
+    }
+  }
+  
+  &--ghost {
+    background-color: transparent;
+    color: inherit;
+    
+    &:hover:not(:disabled) {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+  
+  &--gradient {
+    background: linear-gradient(135deg, vars.$color-primario, vars.$color-secundario);
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, 
+        color.scale(vars.$color-primario, $lightness: -5%), 
+        color.scale(vars.$color-secundario, $lightness: -5%)
+      );
+      transform: translateY(-2px) scale(1.02);
+    }
+  }
+  
+  // Estados especiales
+  &--loading {
+    position: relative;
+    pointer-events: none;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      margin: auto;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: btn-loading 1s linear infinite;
+    }
+    
+    .btn__text {
+      opacity: 0;
+    }
+  }
+  
+  // Botón con ícono
+  &--icon {
+    .btn__icon {
+      margin-right: 0.5rem;
+      
+      &:only-child {
+        margin: 0;
+      }
+    }
+    
+    &.btn--icon-right .btn__icon {
+      margin-right: 0;
+      margin-left: 0.5rem;
+    }
+  }
+  
+  // Botón de ancho completo
+  &--full-width {
+    width: 100%;
+  }
+  
+  // Botón flotante
+  &--floating {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    
+    &:hover:not(:disabled) {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+// ========================================
+// MIXIN PARA CREAR BOTONES PERSONALIZADOS
+// ========================================
+
+@mixin create-button($primary-color, $secondary-color: null) {
+  $secondary: if($secondary-color, $secondary-color, color.scale($primary-color, $lightness: 10%));
+  
+  @include button-variant($primary, white, $secondary);
+  
+  &.btn--outline {
+    color: $primary;
+    border-color: $primary;
+    
+    &:hover:not(:disabled) {
+      background-color: $primary;
+      color: white;
+    }
+  }
+  
+  &.btn--gradient {
+    background: linear-gradient(135deg, $primary, $secondary);
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, 
+        color.scale($primary, $lightness: -5%), 
+        color.scale($secondary, $lightness: -5%)
+      );
+    }
+  }
+}
+
+// ========================================
+// GRUPO DE BOTONES
+// ========================================
+
+.btn-group {
+  display: inline-flex;
+  
+  .btn {
+    border-radius: 0;
+    margin: 0;
+    
+    &:first-child {
+      border-top-left-radius: $button-border-radius;
+      border-bottom-left-radius: $button-border-radius;
+    }
+    
+    &:last-child {
+      border-top-right-radius: $button-border-radius;
+      border-bottom-right-radius: $button-border-radius;
+    }
+    
+    &:not(:last-child) {
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  }
+  
+  &--vertical {
+    flex-direction: column;
+    
+    .btn {
+      &:first-child {
+        border-radius: $button-border-radius $button-border-radius 0 0;
+      }
+      
+      &:last-child {
+        border-radius: 0 0 $button-border-radius $button-border-radius;
+      }
+      
+      &:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}
+
+// ========================================
+// ANIMACIONES
+// ========================================
+
+@keyframes btn-loading {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes btn-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+// ========================================
+// UTILIDADES ADICIONALES
+// ========================================
+
+.btn__text {
+  display: inline-block;
+}
+
+.btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+  }
+}
+
+// ========================================
+// RESPONSIVE DESIGN
+// ========================================
+
+@media (max-width: 768px) {
+  .btn {
+    &--floating {
+      bottom: 1rem;
+      right: 1rem;
+    }
+  }
+  
+  .btn-group {
+    &:not(.btn-group--vertical) {
+      flex-direction: column;
+      
+      .btn {
+        &:first-child {
+          border-radius: $button-border-radius $button-border-radius 0 0;
+        }
+        
+        &:last-child {
+          border-radius: 0 0 $button-border-radius $button-border-radius;
+        }
+        
+        &:not(:last-child) {
+          border-right: none;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// COMPATIBILIDAD CON CLASES EXISTENTES
+// ========================================
+
+// Mapeo de clases antiguas a nuevas
+.boton { @extend .btn; }
+.btn-primary { @extend .btn, .btn--primary; }
+.btn-secondary { @extend .btn, .btn--secondary; }
+.btn-small { @extend .btn, .btn--small; }
+.btn-large { @extend .btn, .btn--large; }

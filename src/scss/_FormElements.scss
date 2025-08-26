@@ -1,0 +1,451 @@
+@use 'Variables' as vars;
+@use 'FontsStyles' as fonts;
+@use 'sass:map';
+@use 'sass:color';
+
+// ========================================
+// MIXINS Y FUNCIONES AUXILIARES
+// ========================================
+
+@mixin textarea-dimensions {
+  height: 13vh;
+  max-height: 20vh;
+  min-height: 10vh;
+}
+
+@mixin base-input-style {
+  border-radius: 2px;
+  border: 1px solid white;
+  font-family: map.get(vars.$FontPack2, 'Titulo');
+  transition: all 0.3s ease;
+  
+  &:focus {
+    outline: none;
+    outline-color: red;
+  }
+  
+  &:hover {
+    // Note: shadow-difum_imputs mixin needs to be defined or imported
+    // @include shadow-difum_imputs(vars.$color-secundarioB);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Fallback shadow
+  }
+}
+
+@mixin input-size($size) {
+  width: map.get(vars.$inputWithSizes, $size);
+  height: map.get(vars.$inputHeigtSizes, 'pequeno');
+}
+
+@mixin modern-input-style {
+  border: 3px solid white;
+  border-radius: 5px;
+  background-color: white;
+  font-family: map.get(vars.$FontPack2, 'Lato');
+  // Note: shadow-bottom_imput mixin needs to be defined or imported
+  // @include shadow-bottom_imput;
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.1); // Fallback shadow
+  transition: all 0.3s ease;
+}
+
+@mixin responsive-width($desktop: 90%, $tablet: 80%, $mobile: 70%) {
+  width: $desktop;
+  
+  @media (max-width: 1000px) {
+    width: $tablet;
+  }
+  
+  @media (max-width: 600px) {
+    width: $mobile;
+  }
+}
+
+// ========================================
+// TÍTULOS DE FORMULARIOS
+// ========================================
+
+%titulo-base {
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.form-title {
+  @extend %titulo-base;
+  font-family: map.get(vars.$FontPack1, 'Titulo');
+  
+  &--style-1 {
+    font-family: map.get(vars.$FontPack1, 'Titulo');
+  }
+  
+  &--style-2 {
+    color: vars.$GrayRdBg;
+    font-family: map.get(vars.$FontPack2, 'Titulo');
+    text-decoration: underline;
+  }
+  
+  &--style-3 {
+    font-family: map.get(vars.$FontPack2, 'Oswald');
+    text-decoration: underline;
+  }
+  
+  &--reserva {
+    font-family: map.get(vars.$FontPack2, 'Titulo');
+    text-transform: uppercase;
+    color: color.adjust(vars.$colorBg-secundarioC, $lightness: 20%);
+  }
+}
+
+// ========================================
+// LABELS
+// ========================================
+
+%label-base {
+  font-weight: 100;
+  margin-bottom: 0.5rem;
+  
+  &::first-letter {
+    font-size: map.get(vars.$FontSize, 'mediano');
+  }
+  
+  &:focus {
+    outline: none;
+    outline-color: red;
+  }
+}
+
+.form-label {
+  @extend %label-base;
+  font-size: map.get(vars.$FontSize, 'pequeno');
+  font-family: map.get(vars.$FontPack3, 'Titulo');
+  
+  &--small {
+    font-family: map.get(vars.$FontPack2, 'Oswald');
+    font-size: larger;
+    color: vars.$color-primarioB;
+    align-self: flex-start;
+    margin-left: 10px;
+    
+    @media (max-width: 600px) {
+      font-size: medium;
+      padding: 10px;
+    }
+  }
+  
+  &--reserva {
+    font-size: map.get(vars.$FontSize, 'mediano');
+    font-weight: 500;
+    font-family: map.get(vars.$FontPack2, 'Tema');
+    color: color.adjust(vars.$colorBg-secundarioC, $lightness: 20%);
+    align-self: flex-start;
+    
+    &::first-letter {
+      font-weight: bold;
+    }
+  }
+}
+
+// ========================================
+// INPUTS BASE
+// ========================================
+
+%input-base {
+  @include base-input-style;
+  background-color: rgb(225, 225, 225);
+}
+
+.form-input {
+  @extend %input-base;
+  
+  // Tamaños de inputs
+  &--xs {
+    @include input-size('Xpequeno');
+    align-self: center;
+  }
+  
+  &--small {
+    @include input-size('pequeno');
+    align-self: flex-start;
+    margin-left: 5%;
+  }
+  
+  &--medium {
+    @include input-size('mediano');
+    align-self: flex-start;
+    margin-left: 10px;
+  }
+  
+  &--large {
+    @include input-size('grande');
+    align-self: flex-start;
+    margin-left: 5%;
+  }
+  
+  &--xl {
+    @include input-size('Xgrande');
+    align-self: center;
+  }
+}
+
+// ========================================
+// INPUTS MODERNOS (ESTILO 2)
+// ========================================
+
+.modern-input {
+  @include modern-input-style;
+  
+  &--xs {
+    @include input-size('pequeno');
+    
+    &:hover {
+      // @include shadow-difum_imputs(vars.$color-primario);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+  }
+  
+  &--small {
+    @include input-size('grande');
+    align-self: flex-start;
+    margin-left: 5%;
+    border-radius: map.get(vars.$borders, 'pequeno');
+    
+    &:hover {
+      // @include shadow-difum_imputs(color.adjust(vars.$color-primarioB, $lightness: 25%));
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    @media (max-width: 600px) {
+      width: 70%;
+    }
+  }
+  
+  &--medium {
+    @include responsive-width();
+    
+    & {
+      height: map.get(vars.$inputHeigtSizes, 'pequeno');
+      border: transparent;
+    }
+    
+    &:hover,
+    &:focus {
+      outline: none;
+      // @include Hover_shadow-difum_imput;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  &--reserva {
+    @include responsive-width();
+    
+    & {
+      height: map.get(vars.$inputHeigtSizes, 'pequeno');
+      background-color: white;
+      border: transparent;
+      // @include shadow-bottom_imput_color(blue);
+      box-shadow: 0 2px 0 0 blue;
+    }
+    
+    &:hover,
+    &:focus {
+      outline: none;
+      // @include shadow-bottom_imput_color(vars.$colorBg-secundarioC);
+      box-shadow: 0 2px 0 0 vars.$colorBg-secundarioC;
+    }
+    
+    &.small {
+      width: map.get(vars.$inputWithSizes, 'pequeno');
+      align-self: flex-start;
+      margin-left: 10px;
+    }
+  }
+}
+
+// ========================================
+// TEXTAREAS
+// ========================================
+
+.form-textarea {
+  @include textarea-dimensions;
+  border: 2px solid gray;
+  border-radius: 5px;
+  background-color: rgb(230, 230, 230);
+  margin-bottom: 10px;
+  resize: vertical;
+  font-family: inherit;
+  
+  &--basic {
+    width: map.get(vars.$inputWithSizes, 'Xgrande');
+  }
+  
+  &--modern {
+    @include responsive-width(90%, 80%, 70%);
+    color: gray;
+    border: transparent;
+    // @include shadow-bottom_imput;
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.1);
+    
+    &:hover,
+    &:focus {
+      outline: none;
+      // @include Hover_shadow-difum_imput;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    @media (max-width: 800px) {
+      height: auto;
+      background-color: red;
+    }
+    
+    @media (max-width: 400px) {
+      width: 50%;
+      background-color: red;
+    }
+  }
+}
+
+// ========================================
+// INPUTS RANGE
+// ========================================
+
+.range-input {
+  border-radius: map.get(vars.$borders, 'grande');
+  height: 8px;
+  cursor: grab;
+  transition: all 0.2s ease;
+  
+  &--small {
+    width: map.get(vars.$RangeSizes, 'pequeno');
+    accent-color: vars.$color-primarioD;
+  }
+  
+  &--medium {
+    width: map.get(vars.$RangeSizes, 'mediano');
+    accent-color: vars.$colorBg-secundarioB;
+  }
+  
+  &--large {
+    width: map.get(vars.$RangeSizes, 'grande');
+    accent-color: vars.$color-primario;
+  }
+}
+
+// ========================================
+// RADIO BUTTONS PERSONALIZADOS
+// ========================================
+
+.custom-radio {
+  legend {
+    color: vars.$color-primarioB;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  input[type='radio'] {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    
+    &::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      position: relative;
+      left: 2px;
+      bottom: 0.01mm;
+      background-color: #3a3a3a;
+      border: 2px solid white;
+      display: inline-block;
+      visibility: visible;
+      transition: all 0.2s ease;
+    }
+    
+    &:checked::after {
+      left: 0.6mm;
+      bottom: -0.2mm;
+      background-color: vars.$color-primarioB;
+    }
+  }
+}
+
+// ========================================
+// UTILIDADES DE ALINEACIÓN
+// ========================================
+
+.align {
+  &--start {
+    margin-left: 5%;
+    align-self: flex-start;
+  }
+  
+  &--center {
+    margin: 0 5%;
+    align-self: center;
+  }
+  
+  &--end {
+    margin-right: 10px;
+    align-self: flex-end;
+  }
+}
+
+// ========================================
+// ESTADOS DE FORMULARIO
+// ========================================
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  
+  &--inline {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  &--error {
+    .form-input,
+    .modern-input,
+    .form-textarea {
+      border-color: #e74c3c;
+      
+      &:focus {
+        outline-color: #e74c3c;
+        box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+      }
+    }
+  }
+  
+  &--success {
+    .form-input,
+    .modern-input,
+    .form-textarea {
+      border-color: #27ae60;
+      
+      &:focus {
+        outline-color: #27ae60;
+        box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2);
+      }
+    }
+  }
+}
+
+// ========================================
+// ACCESIBILIDAD Y UX
+// ========================================
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+// Mejora el contraste en modo alto contraste
+@media (prefers-contrast: high) {
+  .form-input,
+  .modern-input,
+  .form-textarea {
+    border-width: 2px;
+  }
+}

@@ -1,0 +1,34 @@
+// Importar variables primero (necesario para otros archivos)
+@use 'Variables' ;
+
+// Importar funciones y mixins de Sass
+@use 'sass:color';
+@use 'sass:map';
+@use 'sass:math';
+
+// Importar todos los módulos
+@use 'Alerts';
+@use 'Article';
+@use 'Badges';
+@use 'Body';
+@use 'botones';
+@use 'Cards';
+@use 'Containers'; 
+@use 'DivDisplays'; 
+@use 'DivStyle';
+@use 'FontsStyles'; 
+@use 'FormElements';
+@use 'Forms';
+@use 'Grids';
+@use 'Header';
+@use 'Hovers';
+@use 'NavBar'; 
+@use 'Paddings';
+@use 'Shadow'; 
+@use 'Utilitdades';
+@use 'Footer';
+
+// Estilos personalizados
+.emoji-cursor {
+    cursor: url('/WhatsApp_Image_2024-04-30_at_9.34.35_PM-removebg-preview.png'), auto;
+}

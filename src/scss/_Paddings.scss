@@ -1,0 +1,331 @@
+@use 'Variables' as *;
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:list';
+
+// ===== PADDING SYSTEM FUNCTIONS =====
+
+/**
+ * Obtiene un tamaño de padding del mapa de variables
+ * @param {String} $size - El nombre del tamaño de padding
+ * @return {String|null} - El valor del padding o null si no existe
+ */
+@function get-padding($size) {
+  @if map.has-key($PaddingSizes, $size) {
+    @return map.get($PaddingSizes, $size);
+  } @else {
+    @warn "El tamaño de padding '#{$size}' no está definido. Tamaños disponibles: #{map.keys($PaddingSizes)}";
+    @return null;
+  }
+}
+
+/**
+ * Convierte valores en rem o em basados en un multiplicador
+ * @param {Number} $base - Valor base
+ * @param {String} $unit - Unidad deseada (rem, em, px)
+ * @return {String} - Valor con la unidad especificada
+ */
+@function convert-padding-unit($base, $unit: 'rem') {
+  @if $unit == 'rem' {
+    @return #{$base}rem;
+  } @else if $unit == 'em' {
+    @return #{$base}em;
+  } @else if $unit == 'px' {
+    @return #{$base}px;
+  } @else {
+    @return $base;
+  }
+}
+
+// ===== ADVANCED PADDING MIXINS =====
+
+/**
+ * Mixin principal para aplicar padding
+ * @param {String} $size - Nombre del tamaño de padding
+ * @param {String} $important - Añadir !important (opcional)
+ */
+@mixin padding($size, $important: false) {
+  $padding-value: get-padding($size);
+  @if $padding-value {
+    @if $important {
+      padding: $padding-value !important;
+    } @else {
+      padding: $padding-value;
+    }
+  }
+}
+
+/**
+ * Mixin para padding direccional específico
+ * @param {String} $direction - Dirección (top, right, bottom, left)
+ * @param {String} $size - Nombre del tamaño de padding
+ * @param {String} $important - Añadir !important (opcional)
+ */
+@mixin padding-directional($direction, $size, $important: false) {
+  $padding-value: get-padding($size);
+  @if $padding-value {
+    $property: padding-#{$direction};
+    @if $important {
+      #{$property}: $padding-value !important;
+    } @else {
+      #{$property}: $padding-value;
+    }
+  }
+}
+
+/**
+ * Mixin para padding horizontal (left + right)
+ * @param {String} $size - Nombre del tamaño de padding
+ * @param {String} $important - Añadir !important (opcional)
+ */
+@mixin padding-horizontal($size, $important: false) {
+  $padding-value: get-padding($size);
+  @if $padding-value {
+    @if $important {
+      padding-left: $padding-value !important;
+      padding-right: $padding-value !important;
+    } @else {
+      padding-left: $padding-value;
+      padding-right: $padding-value;
+    }
+  }
+}
+
+/**
+ * Mixin para padding vertical (top + bottom)
+ * @param {String} $size - Nombre del tamaño de padding
+ * @param {String} $important - Añadir !important (opcional)
+ */
+@mixin padding-vertical($size, $important: false) {
+  $padding-value: get-padding($size);
+  @if $padding-value {
+    @if $important {
+      padding-top: $padding-value !important;
+      padding-bottom: $padding-value !important;
+    } @else {
+      padding-top: $padding-value;
+      padding-bottom: $padding-value;
+    }
+  }
+}
+
+/**
+ * Mixin para padding responsivo
+ * @param {Map} $breakpoint-sizes - Mapa de breakpoints y sus tamaños de padding
+ */
+@mixin padding-responsive($breakpoint-sizes) {
+  @each $breakpoint, $size in $breakpoint-sizes {
+    @if $breakpoint == 'base' {
+      @include padding($size);
+    } @else {
+      @if map.has-key($breakpoints, $breakpoint) {
+        @media screen and (min-width: map.get($breakpoints, $breakpoint)) {
+          @include padding($size);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Mixin para padding con transición suave
+ * @param {String} $size - Nombre del tamaño de padding
+ * @param {String} $duration - Duración de la transición
+ */
+@mixin padding-animated($size, $duration: 0.3s) {
+  @include padding($size);
+  transition: padding $duration ease-in-out;
+}
+
+/**
+ * Mixin para padding simétrico personalizado
+ * @param {String} $vertical - Tamaño vertical del padding
+ * @param {String} $horizontal - Tamaño horizontal del padding
+ */
+@mixin padding-symmetric($vertical, $horizontal) {
+  $v-value: get-padding($vertical);
+  $h-value: get-padding($horizontal);
+  
+  @if $v-value and $h-value {
+    padding: $v-value $h-value;
+  }
+}
+
+// ===== UTILITY CLASSES GENERATION =====
+
+// Verificar que $PaddingSizes existe antes de generar clases
+@if meta.variable-exists('PaddingSizes') {
+  // Clases de padding base
+  @each $name, $value in $PaddingSizes {
+    .p-#{$name} {
+      @include padding($name);
+    }
+    
+    // Clases con !important para sobreescribir estilos
+    .p-#{$name}-important {
+      @include padding($name, true);
+    }
+  }
+
+  // Clases direccionales
+  @each $name, $value in $PaddingSizes {
+    // Top
+    .pt-#{$name} {
+      @include padding-directional(top, $name);
+    }
+    
+    // Right  
+    .pr-#{$name} {
+      @include padding-directional(right, $name);
+    }
+    
+    // Bottom
+    .pb-#{$name} {
+      @include padding-directional(bottom, $name);
+    }
+    
+    // Left
+    .pl-#{$name} {
+      @include padding-directional(left, $name);
+    }
+    
+    // Horizontal (left + right)
+    .px-#{$name} {
+      @include padding-horizontal($name);
+    }
+    
+    // Vertical (top + bottom)
+    .py-#{$name} {
+      @include padding-vertical($name);
+    }
+  }
+
+  // ===== RESPONSIVE PADDING CLASSES =====
+
+  // Usar breakpoints del archivo Variables
+  @if meta.variable-exists('breakpoints') {
+    // Generar clases responsivas
+    @each $breakpoint-name, $breakpoint-value in $breakpoints {
+      @if $breakpoint-name != 'xs' { // Evitar duplicar las clases base
+        @media screen and (min-width: $breakpoint-value) {
+          @each $name, $value in $PaddingSizes {
+            // Padding base
+            .p-#{$breakpoint-name}-#{$name} {
+              @include padding($name);
+            }
+            
+            // Padding direccional
+            .pt-#{$breakpoint-name}-#{$name} {
+              @include padding-directional(top, $name);
+            }
+            
+            .pr-#{$breakpoint-name}-#{$name} {
+              @include padding-directional(right, $name);
+            }
+            
+            .pb-#{$breakpoint-name}-#{$name} {
+              @include padding-directional(bottom, $name);
+            }
+            
+            .pl-#{$breakpoint-name}-#{$name} {
+              @include padding-directional(left, $name);
+            }
+            
+            .px-#{$breakpoint-name}-#{$name} {
+              @include padding-horizontal($name);
+            }
+            
+            .py-#{$breakpoint-name}-#{$name} {
+              @include padding-vertical($name);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // ===== SPECIAL PADDING UTILITIES =====
+
+  // Generar clases simétricas comunes
+  $common-combinations: (
+    'Xpequeno-pequeno': (Xpequeno, pequeno),
+    'pequeno-mediano': (pequeno, mediano),
+    'mediano-grande': (mediano, grande),
+    'grande-Xgrande': (grande, Xgrande)
+  );
+
+  @each $name, $values in $common-combinations {
+    .p-#{$name} {
+      @include padding-symmetric(list.nth($values, 1), list.nth($values, 2));
+    }
+  }
+
+  // ===== ANIMATION HELPERS =====
+
+  // Clases con transiciones para cambios de padding suaves
+  @each $name, $value in $PaddingSizes {
+    .p-#{$name}-animated {
+      @include padding-animated($name);
+    }
+    
+    .p-#{$name}-animated-fast {
+      @include padding-animated($name, 0.15s);
+    }
+    
+    .p-#{$name}-animated-slow {
+      @include padding-animated($name, 0.6s);
+    }
+  }
+}
+
+// ===== CLASES ESPECIALES (siempre disponibles) =====
+
+// Clase para resetear padding
+.p-none {
+  padding: 0 !important;
+}
+
+// Clases para auto-padding (útil en flex/grid)
+.p-auto {
+  padding: auto;
+}
+
+// ===== DEBUG AND DEVELOPMENT HELPERS =====
+
+// Clase para visualizar padding en desarrollo
+.padding-debug {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px dashed rgba(255, 0, 0, 0.3);
+    pointer-events: none;
+    z-index: 9999;
+  }
+}
+
+// Mostrar información del padding actual (solo en desarrollo)
+@if meta.variable-exists('debug-mode') {
+  .padding-info {
+    position: relative;
+    
+    &::after {
+      content: 'Padding: ' attr(data-padding);
+      position: absolute;
+      top: -20px;
+      left: 0;
+      font-size: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 2px 4px;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+  }
+}

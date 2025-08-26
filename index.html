@@ -9,155 +9,301 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="DripCSS/CSS/Style.css" />
+  <link rel="stylesheet" href="src/scss/main.css" />
   <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
   <link rel="icon" href="DripCSS/IMG/Drip_Css_Icon.ico">
 
   <title>Inicio</title>
 </head>
 
-<nav style="position: relative;" class="nav2_Ver2 navbar-responsive ">
-  <a href="#" class="logo">Drip_CSS</a>
-  <ul>
-    <li><a href="/index.html">Inicio</a></li>
-    <li><a href="/temas.html">Temas</a></li>
-    <li><a href="/Doc.html">Documentacion</a></li>
-    <li><a href="/abaut.html">Contacto</a></li>
-    <li><a href="https://github.com/0kev0/0Kev0.github.io">GitHub</a></li>
-  </ul>
+<!-- Navbar moderno con tema nav2 -->
+<nav class="nav2">
+  <div class="header">
+    <a href="#" class="logo">Drip_CSS</a>
+    
+    <ul class="nav-links">
+      <li><a href="/index.html">Inicio</a></li>
+      <li>
+        <a href="/temas.html">Temas</a>
+        <ul class="drip">
+          <li><a href="#componentes">Componentes</a></li>
+          <li><a href="#utilidades">Utilidades</a></li>
+          <li><a href="#ejemplos">Ejemplos</a></li>
+        </ul>
+      </li>
+      <li><a href="/Doc.html">Documentación</a></li>
+      <li>
+        <a href="/abaut.html">Contacto</a>
+        <ul class="drip">
+          <li><a href="#soporte">Soporte</a></li>
+          <li><a href="#colaborar">Colaborar</a></li>
+        </ul>
+      </li>
+      <li><a href="https://github.com/0kev0/0Kev0.github.io" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i> GitHub
+      </a></li>
+    </ul>
+  </div>
 </nav>
 
-<body style="    background-color: #fff;">
-  <div class="info-container backgraund-img">
-
-    <div class="center-image">
-      <img class="img_shadow" sty src="DRIP CSS (1).png" alt="">
-    </div>
-
-    <h2 style="color: whitesmoke; margin:auto" class="Titulo_special Inicial_Resaltada_h1 txt_Xg centerTXT  ">Bienvenido
-      a {Drip_Css
-      Library</h2>
-    <p style="color: aliceblue;" class=" contenido text-center letter-Gradient centerTXT">El proyecto Drip_CSS consiste
-      en
-      una biblioteca tipo Bootstrap para interactuar con sitios web. Proporciona una amplia gama de estilos
-      predefinidos,
-      componentes y utilidades CSS que pueden ser fácilmente integrados en proyectos web para mejorar su apariencia y
-      funcionalidad.</p>
-  </div>
-
-  <div class="info-container-content margin-copy ">
-    <h3 class="Font_Tema">Características Principales</h3>
-    <p>
-      Estilos Urbanos
-      Dripp.css captura la esencia del estilo urbano con una paleta de colores audaz y contrastante, tipografía nítida
-      y elementos gráficos inspirados en la cultura urbana. <br>
-
-      <br>
-    <h3>Personalizable y Flexible</h3>
-    Con su estructura modular y variables Sass, Dripp.css es altamente personalizable, lo que te permite adaptar
-    fácilmente los estilos a las necesidades específicas de tu proyecto. <br>
-
-    <br>
-    <h3>Componentes Modernos</h3>
-    Desde botones y tarjetas hasta barras de navegación y formularios, Dripp.css ofrece una amplia variedad de
-    componentes modernos listos para usar, diseñados para mejorar la experiencia del usuario y agilizar el
-    desarrollo. <br>
-
-    <br>
-    <h3>Ligero y Eficiente</h3>
-    Dripp.css está diseñado para ser ligero y eficiente, lo que garantiza un rendimiento óptimo de tu sitio web sin
-    sacrificar la calidad o la estética. <br>
-
-    <br>
-    <h3>Documentación Completa</h3>
-    Nuestra documentación detallada proporciona instrucciones claras y ejemplos prácticos para ayudarte a integrar y
-    personalizar fácilmente Dripp.css en tu proyecto. <br>
-    </p>
-    </p>
-    <br>
-    <hr><br>
-    <br>
-    <h3>Usos</h3>
-    <p>Para utilizar Drip_CSS en tu proyecto web, simplemente enlaza el archivo CSS proporcionado en el encabezado de
-      tu HTML:</p>
-    <br>
-
-    <div id="code" class="plta-uno-backgraund-A text-center">
-      <p class="contenido_link"><code>&lt;link rel="stylesheet" href="path/to/drip_css.css"&gt;</code></p><button
-        class="copy-btn" onclick="copyCodeToClipboard('contenido_link','success-alert-contenido_link')"><i
-          class="fa-regular fa-copy"></i></button>
-      <div id="success-alert-contenido_link" class="alert alert-success slide-in-right ocultar">¡Éxito! Se ha copiado
-        Corectamente.
-        <span class="close" onclick="closeAlert()">×</span>
+<body style="background-color: #fff;">
+  <!-- Contenedor principal hero con imagen -->
+  <div class="container-image container-image--fluid">
+    <img class="image" src="DRIP CSS (1).png" alt="Drip CSS Logo">
+    
+    <div class="overlay">
+      <div class="overlay-content">
+        <h2 class="title">Bienvenido a {Drip_Css Library}</h2>
+        <p class="description">El proyecto Drip_CSS consiste en una biblioteca tipo Bootstrap para interactuar con sitios web. Proporciona una amplia gama de estilos predefinidos, componentes y utilidades CSS que pueden ser fácilmente integrados en proyectos web para mejorar su apariencia y funcionalidad.</p>
       </div>
     </div>
-    <br>
-    <p>Luego, puedes comenzar a utilizar los estilos y componentes proporcionados por Drip_CSS en tu código HTML.</p>
-    <br>
-    <hr><br>
-    <br>
-    <h3>Documentacion</h3>
-    <p>Para obtener más detalles sobre cómo usar Drip_CSS y ver ejemplos de su uso, visita nuestra web de
-      documentación en <a href="#">Documentacion</a></p>
-    <br>
-    <hr><br>
-    <h3>Conjunto completo de complementos</h3>
-    <p>Bootstrap cuenta con una docena de plugins que puedes incluir en cualquier proyecto. Colócalos todos a la vez o
-      elige solo los que necesites.</p>
-    <br>
-    <hr style="border-color: #525252;">
-    <br>
-    <div style="color: rgb(0, 136, 255);"
-      class=" container-regular GRID-col-2  pa centerTXT rounded-md my-text-16 Bg-Base ">
-      <p class="shadow-down" style="color: aliceblue;">Alerts</p>
-      <p class="shadow-down" style="color: aliceblue;">badges</p>
-      <p class="shadow-down" style="color: aliceblue;">Botones</p>
-      <p class="shadow-down" style="color: aliceblue;">Tarjetas</p>
-      <p class="shadow-down" style="color: aliceblue;">Contenedores</p>
-      <p class="shadow-down" style="color: aliceblue;">Footers</p>
-      <p class="shadow-down" style="color: aliceblue;">Formularios</p>
-      <p class="shadow-down" style="color: aliceblue;">Elementos de Formularios</p>
-      <p class="shadow-down" style="color: aliceblue;">Grids</p>
-      <p class="shadow-down" style="color: aliceblue;">Headers</p>
-      <p class="shadow-down" style="color: aliceblue;">NavBars</p>
-      <p class="shadow-down" style="color: aliceblue;">Hovers</p>
-      <p></p>
+  </div>
+
+  <!-- Contenedor principal de contenido -->
+  <div class="container-content container-content--regular">
+    <div class="header">
+      <h3 class="title">Características Principales</h3>
+    </div>
+    
+    <div class="content">
+      <h3>Estilos Urbanos</h3>
+      <p>
+        Dripp.css captura la esencia del estilo urbano con una paleta de colores audaz y contrastante, tipografía nítida
+        y elementos gráficos inspirados en la cultura urbana.
+      </p>
+
+      <h3>Personalizable y Flexible</h3>
+      <p>
+        Con su estructura modular y variables Sass, Dripp.css es altamente personalizable, lo que te permite adaptar
+        fácilmente los estilos a las necesidades específicas de tu proyecto.
+      </p>
+
+      <h3>Componentes Modernos</h3>
+      <p>
+        Desde botones y tarjetas hasta barras de navegación y formularios, Dripp.css ofrece una amplia variedad de
+        componentes modernos listos para usar, diseñados para mejorar la experiencia del usuario y agilizar el
+        desarrollo.
+      </p>
+
+      <h3>Ligero y Eficiente</h3>
+      <p>
+        Dripp.css está diseñado para ser ligero y eficiente, lo que garantiza un rendimiento óptimo de tu sitio web sin
+        sacrificar la calidad o la estética.
+      </p>
+
+      <h3>Documentación Completa</h3>
+      <p>
+        Nuestra documentación detallada proporciona instrucciones claras y ejemplos prácticos para ayudarte a integrar y
+        personalizar fácilmente Dripp.css en tu proyecto.
+      </p>
     </div>
   </div>
-  </div>
-  <footer>
-    <div class="cell-footer ">
-      <footer class="pie-pagina plta-dos-backgraund-B">
 
-        <div class="grupo-1">
-          <div class="Fother-box">
-            <figure>
-              <a href="#">
-                <img src="/WhatsApp_Image_2024-04-30_at_9.34.35_PM-removebg-preview.png" alt="Logo de drip.css">
-              </a>
-            </figure>
-          </div>
-          <div class="Fother-box">
-            <h2>Universidad de el Salvador</h2>
-            <p>Departamento de Ingenieria y Arquitectura</p>
-            <p>Ingenieria de Sistemas Informaticos</p>
-          </div>
-          <div class="Fother-box">
-            <h2>SIGUENOS</h2>
-            <div class="red-social">
-              <a id="fb" href="#" class="fa fa-facebook fb"></a>
-              <a id="ig" href="#" class="fa fa-instagram"></a>
-              <a id="tw" href="#" class="fa fa-twitter"></a>
-              <a id="yt" href="https://youtu.be/dQw4w9WgXcQ" class="fa fa-youtube"></a>
+  <!-- Sección de instalación -->
+  <div class="info-container info-container--info">
+    <div class="info-container__header">
+      <h3 class="title">Instalación y Uso</h3>
+    </div>
+    <div class="info-container__content">
+      <p>Para utilizar Drip_CSS en tu proyecto web, simplemente enlaza el archivo CSS proporcionado en el encabezado de
+        tu HTML:</p>
+
+      <div id="code" class="plta-uno-backgraund-A text-center">
+        <p class="contenido_link"><code>&lt;link rel="stylesheet" href="path/to/drip_css.css"&gt;</code></p>
+        <button class="copy-btn" onclick="copyCodeToClipboard('contenido_link','success-alert-contenido_link')">
+          <i class="fa-regular fa-copy"></i>
+        </button>
+        <div id="success-alert-contenido_link" class="alert alert-success slide-in-right ocultar">¡Éxito! Se ha copiado
+          correctamente.
+          <span class="close" onclick="closeAlert()">×</span>
+        </div>
+      </div>
+
+      <p>Luego, puedes comenzar a utilizar los estilos y componentes proporcionados por Drip_CSS en tu código HTML.</p>
+    </div>
+  </div>
+
+  <!-- Documentación -->
+  <div class="info-container info-container--success">
+    <div class="info-container__header">
+      <h3 class="title">Documentación</h3>
+    </div>
+    <div class="info-container__content">
+      <p>Para obtener más detalles sobre cómo usar Drip_CSS y ver ejemplos de su uso, visita nuestra web de
+        documentación en <a href="#">Documentación</a></p>
+    </div>
+  </div>
+
+  <!-- Componentes disponibles -->
+  <div class="container-content container-content--secondary">
+    <div class="header">
+      <h3 class="title">Conjunto completo de complementos</h3>
+      <p class="subtitle">Bootstrap cuenta con una docena de plugins que puedes incluir en cualquier proyecto. Colócalos todos a la vez o
+        elige solo los que necesites.</p>
+    </div>
+    
+    <div class="content">
+      <div class="grid grid--4 grid--gap-lg">
+        <div class="container--interactive">
+          <p class="shadow-down">Alerts</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Badges</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Botones</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Tarjetas</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Contenedores</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Footers</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Formularios</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Elementos de Formularios</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Grids</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Headers</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">NavBars</p>
+        </div>
+        <div class="container--interactive">
+          <p class="shadow-down">Hovers</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer moderno -->
+  <footer class="modern-footer">
+    <div class="footer-particles">
+      <div class="footer-particle" style="left: 10%; width: 4px; height: 4px; animation-delay: 0s;"></div>
+      <div class="footer-particle" style="left: 30%; width: 6px; height: 6px; animation-delay: 5s;"></div>
+      <div class="footer-particle" style="left: 50%; width: 3px; height: 3px; animation-delay: 10s;"></div>
+      <div class="footer-particle" style="left: 70%; width: 5px; height: 5px; animation-delay: 15s;"></div>
+      <div class="footer-particle" style="left: 90%; width: 4px; height: 4px; animation-delay: 20s;"></div>
+    </div>
+
+    <div class="container-footer">
+      <div class="footer-main">
+        <div class="footer-grid">
+          <!-- Logo y descripción -->
+          <div class="footer-column">
+            <div class="footer-logo">
+              <div class="footer-logo-icon">
+                <i class="fas fa-code"></i>
+              </div>
+              <div class="footer-logo-text">Drip_CSS</div>
             </div>
+            <p>Una biblioteca CSS moderna e innovadora que captura la esencia del estilo urbano. Diseñada para desarrolladores que buscan crear interfaces web únicas y atractivas.</p>
+            <div class="social-links">
+              <a href="#" class="social-link facebook" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-link instagram" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="social-link twitter" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="https://youtu.be/dQw4w9WgXcQ" class="social-link youtube" aria-label="YouTube">
+                <i class="fab fa-youtube"></i>
+              </a>
+              <a href="https://github.com/0kev0/0Kev0.github.io" class="social-link github" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Enlaces rápidos -->
+          <div class="footer-column">
+            <h3>Enlaces Rápidos</h3>
+            <ul>
+              <li><a href="/index.html">Inicio</a></li>
+              <li><a href="/temas.html">Componentes</a></li>
+              <li><a href="/Doc.html">Documentación</a></li>
+              <li><a href="#ejemplos">Ejemplos</a></li>
+              <li><a href="#changelog">Changelog</a></li>
+              <li><a href="#roadmap">Roadmap</a></li>
+            </ul>
+          </div>
+
+          <!-- Recursos -->
+          <div class="footer-column">
+            <h3>Recursos</h3>
+            <ul>
+              <li><a href="#getting-started">Empezar</a></li>
+              <li><a href="#customization">Personalización</a></li>
+              <li><a href="#utilities">Utilidades</a></li>
+              <li><a href="#best-practices">Mejores Prácticas</a></li>
+              <li><a href="#community">Comunidad</a></li>
+              <li><a href="#support">Soporte</a></li>
+            </ul>
+          </div>
+
+          <!-- Información académica -->
+          <div class="footer-column">
+            <h3>Información Académica</h3>
+            <ul class="contact-info">
+              <li>
+                <i class="fas fa-university"></i>
+                Universidad de El Salvador
+              </li>
+              <li>
+                <i class="fas fa-building"></i>
+                Departamento de Ingeniería y Arquitectura
+              </li>
+              <li>
+                <i class="fas fa-graduation-cap"></i>
+                Ingeniería de Sistemas Informáticos
+              </li>
+              <li>
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:contact@dripcss.com">contact@dripcss.com</a>
+              </li>
+            </ul>
           </div>
         </div>
 
-      </footer>
-    </div>
+        <!-- Newsletter -->
+        <div class="newsletter-section">
+          <h3>Mantente actualizado</h3>
+          <p>Recibe las últimas actualizaciones, nuevos componentes y consejos de desarrollo directamente en tu correo.</p>
+          <form class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="Tu correo electrónico" required>
+            <button type="submit" class="newsletter-btn">
+              <i class="fas fa-paper-plane"></i> Suscribirse
+            </button>
+          </form>
+        </div>
+      </div>
 
+      <div class="footer-bottom">
+        <div class="footer-bottom-content">
+          <div class="copyright">
+            <p>&copy; 2024 Drip_CSS. Todos los derechos reservados. Desarrollado con ❤️ para la comunidad de desarrolladores.</p>
+          </div>
+          <ul class="footer-nav">
+            <li><a href="#privacy">Privacidad</a></li>
+            <li><a href="#terms">Términos</a></li>
+            <li><a href="#cookies">Cookies</a></li>
+            <li><a href="/abaut.html">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </footer>
+  
   <script src="/script.js"></script>
 </body>
 

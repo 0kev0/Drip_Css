@@ -1,0 +1,544 @@
+// =============================================================================
+// DESIGN SYSTEM - VARIABLES SCSS MODERNIZADO
+// =============================================================================
+
+// Importar módulos modernos de Sass
+@use 'sass:meta';
+@use 'sass:map';
+@use 'sass:color';
+
+// =============================================================================
+// PALETAS DE COLORES - RENOMBRADAS PARA EVITAR CONFLICTOS
+// =============================================================================
+
+// Paleta Principal (Púrpura/Violeta)
+$color-scheme-primary: (
+  'bg-primary': rgb(52, 52, 52),
+  'bg-secondary': rgb(62, 6, 95),
+  'primary': rgb(142, 5, 194),
+  'secondary': rgb(112, 11, 151)
+) !default;
+
+$colorbg-primario: rgb(52, 52, 52) !default;
+$colorBg-secundario: rgb(62, 6, 95) !default;
+$color-primario: rgb(142, 5, 194) !default;
+$color-secundario: rgb(112, 11, 151) !default;
+
+// Paleta Secundaria (Rojo/Negro)
+$color-scheme-secondary: (
+  'bg-primary': rgb(0, 0, 0),
+  'bg-secondary': rgb(61, 0, 0),
+  'primary': rgb(255, 0, 0),
+  'secondary': rgb(149, 1, 1)
+) !default;
+
+$colorbg-primarioB: rgb(0, 0, 0) !default;
+$colorBg-secundarioB: rgb(61, 0, 0) !default;
+$color-primarioB: rgb(255, 0, 0) !default;
+$color-secundarioB: rgb(149, 1, 1) !default;
+
+// Paleta Terciaria (Azul/Púrpura claro)
+$color-scheme-tertiary: (
+  'bg-primary': rgb(7, 15, 43),
+  'bg-secondary': rgb(27, 26, 85),
+  'primary': rgb(146, 144, 195),
+  'secondary': rgb(83, 92, 145)
+) !default;
+
+$colorbg-primarioC: rgb(7, 15, 43) !default;
+$colorBg-secundarioC: rgb(27, 26, 85) !default;
+$color-primarioC: rgb(146, 144, 195) !default;
+$color-secundarioC: rgb(83, 92, 145) !default;
+
+// Paleta Cuaternaria (Azul oscuro/Púrpura)
+$color-scheme-quaternary: (
+  'bg-primary': rgb(3, 6, 55),
+  'bg-secondary': rgb(60, 7, 83),
+  'primary': rgb(114, 4, 85),
+  'secondary': #910a67
+) !default;
+
+$colorbg-primarioD: rgb(3, 6, 55) !default;
+$colorBg-secundarioD: rgb(60, 7, 83) !default;
+$color-primarioD: rgb(114, 4, 85) !default;
+$color-secundarioD: #910a67 !default;
+
+// =============================================================================
+// COLORES DEL SISTEMA
+// =============================================================================
+
+// Colores de texto
+$font-colors: (
+  'base': rgb(255, 255, 255),
+  'dark': rgb(33, 37, 41),
+  'light': rgb(248, 249, 250),
+  'muted': rgb(108, 117, 125)
+) !default;
+
+$FontColorBase: rgb(255, 255, 255) !default;
+$text-dark: rgb(33, 37, 41) !default;
+$text-light: rgb(248, 249, 250) !default;
+$text-muted: rgb(108, 117, 125) !default;
+
+// Colores de formularios
+$form-colors: (
+  'primary': rgb(61, 3, 3),
+  'secondary': rgb(97, 0, 154),
+  'background': radial-gradient(at left top, #373737, #4f4f4f, #5a5a5a, #636363, #929292)
+) !default;
+
+$colorForm-primario: rgb(61, 3, 3) !default;
+$colorForm-secundario: rgb(97, 0, 154) !default;
+$GrayRdBg: radial-gradient(at left top, #373737, #4f4f4f, #5a5a5a, #636363, #929292) !default;
+
+// Colores de alertas
+$alert-colors: (
+  'success': ('bg': #d4edda,
+    'border': #c3e6cb,
+    'text': #155724),
+  'error': ('bg': #f8d7da,
+    'border': #f5c6cb,
+    'text': #721c24),
+  'warning': ('bg': #fff3cd,
+    'border': #ffeeba,
+    'text': #856404),
+  'info': ('bg': #d1ecf1,
+    'border': #bee5eb,
+    'text': #0c5460)
+) !default;
+
+// Variables individuales para compatibilidad
+$alert-success-bg: #d4edda !default;
+$alert-success-border: #c3e6cb !default;
+$alert-success-text: #155724 !default;
+
+$alert-error-bg: #f8d7da !default;
+$alert-error-border: #f5c6cb !default;
+$alert-error-text: #721c24 !default;
+
+$alert-warning-bg: #fff3cd !default;
+$alert-warning-border: #ffeeba !default;
+$alert-warning-text: #856404 !default;
+
+$alert-info-bg: #d1ecf1 !default;
+$alert-info-border: #bee5eb !default;
+$alert-info-text: #0c5460 !default;
+
+// Colores adicionales del sistema
+$system-colors: (
+  'bg-light': #f8f9fa,
+  'bg-dark': #212529,
+  'border-default': #dee2e6,
+  'border-light': #f8f9fa,
+  'border-dark': #495057
+) !default;
+
+$bg-light: #f8f9fa !default;
+$bg-dark: #212529 !default;
+$border-color-default: #dee2e6 !default;
+
+// Bootstrap compatibility
+$bs-body-bg-rgb: 33, 37, 41 !default;
+$bs-primary-rgb: 110, 168, 254 !default;
+$bd-accent-rgb: 0, 123, 255 !default;
+$bd-violet-rgb: 88, 86, 214 !default;
+$bd-pink-rgb: 255, 55, 95 !default;
+
+// =============================================================================
+// TIPOGRAFÍA - FONT PACKS MODERNIZADOS
+// =============================================================================
+
+// Sistema de fallbacks mejorado
+$font-stack-sans: 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'sans-serif' !default;
+$font-stack-serif: 'Georgia', 'Times New Roman', 'serif' !default;
+$font-stack-mono: 'Monaco', 'Consolas', 'monospace' !default;
+
+// Font packs organizados por propósito
+$font-pack-modern: (
+  'title': ('Poppins', 'Inter', 'Arial', sans-serif),
+  'heading': ('Nunito', 'Roboto', 'Arial', sans-serif),
+  'body': ('Quicksand', 'Open Sans', 'Arial', sans-serif)
+) !default;
+
+$font-pack-classic: (
+  'title': ('Lato', 'Roboto', 'Arial', sans-serif),
+  'heading': ('Raleway', 'Helvetica Neue', 'Arial', sans-serif),
+  'body': ('Source Sans Pro', 'Arial', sans-serif)
+) !default;
+
+$font-pack-editorial: (
+  'title': ('Playfair Display', 'Georgia', 'serif'),
+  'heading': ('Merriweather', 'Georgia', 'serif'),
+  'body': ('Oswald', 'Arial', sans-serif)
+) !default;
+
+$font-pack-minimal: (
+  'title': ('Roboto', 'Arial', sans-serif),
+  'heading': ('Montserrat', 'Helvetica Neue', 'Arial', sans-serif),
+  'body': ('Open Sans', 'Arial', sans-serif)
+) !default;
+
+// Font families originales (para compatibilidad)
+$FontPack1: (
+  'Titulo': ('Inter', 'Roboto', 'Arial', sans-serif),
+  'Tema': ('Montserrat', 'Helvetica Neue', 'Arial', sans-serif),
+  'Texto': ('Roboto', 'Open Sans', 'Arial', sans-serif)
+) !default;
+
+$FontPack2: (
+  'Titulo': ('Poppins', 'Inter', 'Arial', sans-serif),
+  'Tema': ('Lato', 'Roboto', 'Arial', sans-serif),
+  'Texto': ('Source Sans Pro', 'Roboto', 'Arial', sans-serif),
+  'Lato': ('Lato', 'Roboto', 'Arial', sans-serif),
+  'Oswald': ('Oswald', 'Arial', sans-serif)
+) !default;
+
+$FontPack3: (
+  'Titulo': ('Inter', 'Roboto', 'Arial', sans-serif)
+) !default;
+
+// Tamaños de fuente modernos
+$font-sizes: (
+  'xs': 0.75rem,    // 12px
+  'sm': 0.875rem,   // 14px
+  'base': 1rem,     // 16px
+  'lg': 1.125rem,   // 18px
+  'xl': 1.25rem,    // 20px
+  '2xl': 1.5rem,    // 24px
+  '3xl': 1.875rem,  // 30px
+  '4xl': 2.25rem,   // 36px
+  '5xl': 3rem,      // 48px
+  '6xl': 3.75rem    // 60px
+) !default;
+
+// Compatibilidad con nombres antiguos
+$FontSize: (
+  'Xpequeno': 16px,
+  'pequeno': 18px,
+  'mediano': 20px,
+  'grande': 30px,
+  'Xgrande': 50px
+) !default;
+
+// Pesos de fuente
+$font-weights: (
+  'thin': 100,
+  'light': 300,
+  'normal': 400,
+  'medium': 500,
+  'semibold': 600,
+  'bold': 700,
+  'extrabold': 800,
+  'black': 900
+) !default;
+
+// Alturas de línea
+$line-heights: (
+  'tight': 1.25,
+  'normal': 1.5,
+  'relaxed': 1.75,
+  'loose': 2
+) !default;
+
+// =============================================================================
+// ESPACIADO
+// =============================================================================
+
+// Sistema de espaciado base (multiplos de 4px)
+$spacing: (
+  '0': 0,
+  '1': 0.25rem,     // 4px
+  '2': 0.5rem,      // 8px
+  '3': 0.75rem,     // 12px
+  '4': 1rem,        // 16px
+  '5': 1.25rem,     // 20px
+  '6': 1.5rem,      // 24px
+  '8': 2rem,        // 32px
+  '10': 2.5rem,     // 40px
+  '12': 3rem,       // 48px
+  '16': 4rem,       // 64px
+  '20': 5rem,       // 80px
+  '24': 6rem,       // 96px
+  '32': 8rem        // 128px
+) !default;
+
+// Márgenes (compatibilidad)
+$MarginSizes: (
+  'Xpequeno': 2%,
+  'pequeno': 3%,
+  'mediano': 5%,
+  'grande': 7%,
+  'Xgrande': 8%
+) !default;
+
+// Paddings (compatibilidad)
+$PaddingSizes: (
+  'Xpequeno': 2%,
+  'pequeno': 5%,
+  'mediano': 8%,
+  'grande': 10%,
+  'Xgrande': 15%
+) !default;
+
+// Tamaños universales
+$small: 10px !default;
+$meduium: 15px !default; // Mantener typo para compatibilidad
+$medium: 15px !default; // Versión corregida
+$large: 20px !default;
+
+// =============================================================================
+// DIMENSIONES
+// =============================================================================
+
+// Alturas de inputs
+$input-heights: (
+  'xs': 2rem,       // 32px
+  'sm': 2.5rem,     // 40px
+  'base': 3rem,     // 48px
+  'lg': 3.5rem,     // 56px
+  'xl': 4rem        // 64px
+) !default;
+
+$inputHeigtSizes: (
+  'Xpequeno': 4vh,
+  'pequeno': 4vh,
+  'mediano': 5vh,
+  'grande': 6vh,
+  'Xgrande': 7vh
+) !default;
+
+// Anchos de inputs
+$input-widths: (
+  'xs': 8rem,       // 128px
+  'sm': 12rem,      // 192px
+  'base': 16rem,    // 256px
+  'lg': 20rem,      // 320px
+  'xl': 24rem,      // 384px
+  'full': 100%
+) !default;
+
+$inputWithSizes: (
+  'Xpequeno': 10%,
+  'pequeno': 15%,
+  'mediano': 20%,
+  'grande': 50%,
+  'Xgrande': 90%
+) !default;
+
+// Tamaños de botones
+$button-sizes: (
+  'sm': ('height': 2rem,
+    'width': 4rem,
+    'padding': 0.25rem 0.75rem,
+    'font-size': 0.875rem),
+  'base': ('height': 2.5rem,
+    'width': 6rem,
+    'padding': 0.5rem 1rem,
+    'font-size': 1rem),
+  'lg': ('height': 3rem,
+    'width': 8rem,
+    'padding': 0.75rem 1.5rem,
+    'font-size': 1.125rem),
+  'xl': ('height': 3.5rem,
+    'width': 10rem,
+    'padding': 1rem 2rem,
+    'font-size': 1.25rem)
+) !default;
+
+$BtHeight: (
+  'pequeno': 6vh,
+  'mediano': 8vh,
+  'grande': 10vh,
+  'Xgrande': 12vh
+) !default;
+
+$BtWidth: (
+  'pequeno': 10vh,
+  'mediano': 12vh,
+  'grande': 14vh,
+  'Xgrande': 18vh
+) !default;
+
+// =============================================================================
+// BORDES Y RADIOS
+// =============================================================================
+
+// Grosores de borde
+$border-widths: (
+  '0': 0,
+  '1': 1px,
+  '2': 2px,
+  '4': 4px,
+  '8': 8px
+) !default;
+
+$borders: (
+  'Xpequeno': 1px,
+  'pequeno': 2px,
+  'mediano': 5px,
+  'grande': 8px,
+  'Xgrande': 12px
+) !default;
+
+// Radios de borde
+$border-radius: (
+  'none': 0,
+  'sm': 0.125rem,   // 2px
+  'base': 0.25rem,  // 4px
+  'md': 0.375rem,   // 6px
+  'lg': 0.5rem,     // 8px
+  'xl': 0.75rem,    // 12px
+  '2xl': 1rem,      // 16px
+  '3xl': 1.5rem,    // 24px
+  'full': 9999px
+) !default;
+
+$estandar: 12px !default;
+
+// =============================================================================
+// BREAKPOINTS RESPONSIVE
+// =============================================================================
+
+$breakpoints: (
+  'xs': 0,
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px
+) !default;
+
+// =============================================================================
+// SOMBRAS
+// =============================================================================
+
+$shadows: (
+  'none': none,
+  'xs': 0 1px 2px 0 rgba(0, 0, 0, 0.05),
+  'sm': (0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)),
+  'base': (0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)),
+  'md': (0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)),
+  'lg': (0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)),
+  'xl': 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+  'inner': inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)
+) !default;
+
+// =============================================================================
+// TRANSICIONES
+// =============================================================================
+
+$transitions: (
+  'none': none,
+  'all': all 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'default': all 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'colors': (color, background-color, border-color, text-decoration-color, fill, stroke) 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'opacity': opacity 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'shadow': box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  'transform': transform 150ms cubic-bezier(0.4, 0, 0.2, 1)
+) !default;
+
+// =============================================================================
+// RANGOS Y ALERTAS (Compatibilidad)
+// =============================================================================
+
+$RangeSizes: (
+  'pequeno': 15%,
+  'mediano': 25%,
+  'grande': 50%,
+  'Xgrande': 60%
+) !default;
+
+$AlertsSizes: (
+  'pequeno': 15%,
+  'mediano': 25%,
+  'grande': 50%,
+  'Xgrande': 60%
+) !default;
+
+// Gap spacing
+$extra-small: 0.5rem !default; // 8px
+$small: 0.75rem !default; // 12px - Redefinido con precisión
+$medium: 1rem !default; // 16px - Redefinido con precisión
+$large: 1.5rem !default; // 24px
+$extra-large: 2rem !default; // 32px
+
+// =============================================================================
+// VARIABLES DE BORDES
+// =============================================================================
+
+// Colores de bordes
+$color-border: #dee2e6 !default;
+$color-border-light: #e9ecef !default;
+$color-border-dark: #495057 !default;
+$color-border-primary: rgba($color-primario, 0.3) !default;
+$color-border-secondary: rgba($color-secundario, 0.3) !default;
+
+// Mapa de colores de bordes para consistencia
+$border-colors: (
+  'default': #dee2e6,
+  'light': #e9ecef,
+  'dark': #495057,
+  'primary': rgba($color-primario, 0.3),
+  'secondary': rgba($color-secundario, 0.3),
+  'success': #28a745,
+  'warning': #ffc107,
+  'error': #dc3545,
+  'info': #17a2b8
+) !default;
+
+// =============================================================================
+// COMPATIBILIDAD DE VARIABLES - MODERNIZADA
+// =============================================================================
+
+// Aliases para compatibilidad con nombres en inglés
+$color-primary: $color-primario !default;
+$color-secondary: $color-secundario !default;
+$color-success: #28a745 !default;
+$color-warning: #ffc107 !default;
+$color-danger: #dc3545 !default;
+$color-info: #17a2b8 !default;
+
+// Aliases para fondos
+$bg-primary: $colorbg-primario !default;
+$bg-secondary: $colorBg-secundario !default;
+
+// =============================================================================
+// FUNCIONES MODERNAS DE UTILIDAD
+// =============================================================================
+
+// Función moderna para obtener valores de mapas con fallback
+@function get-map-value($map, $key, $fallback: null) {
+  @if map.has-key($map, $key) {
+    @return map.get($map, $key);
+  }
+  @return $fallback;
+}
+
+// Función moderna para manejo seguro de colores
+@function lighten-modern($color, $percentage) {
+  @return color.scale($color, $lightness: $percentage);
+}
+
+@function darken-modern($color, $percentage) {
+  @return color.scale($color, $lightness: -$percentage);
+}
+
+// =============================================================================
+// MIXINS DE SHADOW - INCLUIDOS AQUÍ PARA EVITAR DEPENDENCIAS CIRCULARES
+// ============================================================================= 
+
+@mixin shadow-difum_imputs($color) {
+  box-shadow: 0 0 8px rgba($color, 0.3);
+}
+
+@mixin shadow-bottom_imput {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@mixin shadow-bottom_imput_color($color) {
+  box-shadow: 0 2px 4px rgba($color, 0.3);
+}
+
+@mixin Hover_shadow-difum_imput {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+} 
